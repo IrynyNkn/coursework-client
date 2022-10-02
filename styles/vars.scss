@@ -1,0 +1,28 @@
+$dark-gray: #202121;
+$dark-gray-hover: rgba(32, 33, 33, 0.75);
+$gray-border: 1px solid #e6eaea;
+$light-bg: #f4f7f6;
+
+@mixin button {
+  text-transform: uppercase;
+}
+
+@mixin dark-button {
+  @include button;
+  background-color: $dark-gray;
+  color: #f4f7f6;
+  font-size: 0.875em;
+  font-weight: 500;
+  border: none;
+  padding: 1.5em 3em;
+  transition: background-color 250ms ease-in-out;
+
+  &:hover {
+    background-color: rgba(32, 33, 33, 0.92);
+  }
+}
+
+@mixin header-btn-label {
+  text-transform: uppercase;
+  font-size: 0.8125em;
+}
