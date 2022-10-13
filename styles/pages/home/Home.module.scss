@@ -1,0 +1,10 @@
+@import "styles/vars";
+
+.gamesList {
+  padding: rem(30) 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: rem(24) rem(36);
+  max-width: 1200px;
+  margin: 0 auto;
+}

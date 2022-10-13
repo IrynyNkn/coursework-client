@@ -6,13 +6,12 @@
   left: -320px;
   width: 320px;
   height: 100%;
-  z-index: 3;
+  z-index: 100;
   transition: left 300ms ease-in-out;
 
   &.open {
     left: 0;
   }
-
 }
 
 .overlay {
@@ -23,7 +22,7 @@
   height: 100vh;
   background-color: $dark-gray-hover;
   opacity: 0;
-  z-index: 3;
+  z-index: 100;
   visibility: hidden;
   transition: opacity 250ms ease-in-out, visibility 250ms ease-in-out;
 
@@ -31,7 +30,6 @@
     visibility: visible;
     opacity: 1;
   }
-
 }
 
 .closeBtnContainer {
@@ -55,7 +53,6 @@
   align-items: center;
 
   &:hover {
-
     & .closeIcon path {
       fill: $dark-gray-hover;
     }
@@ -63,7 +60,6 @@
     & .closeLabel {
       color: $dark-gray-hover;
     }
-
   }
 }
 
@@ -75,7 +71,6 @@
     fill: #202121;
     transition: fill 250ms ease-in-out;
   }
-
 }
 
 .menuItem {
@@ -90,7 +85,6 @@
   transition: background-color 150ms ease-in;
 
   &:hover {
-    background-color: #FCFCFC;
+    background-color: #fcfcfc;
   }
-
 }

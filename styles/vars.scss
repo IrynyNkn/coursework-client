@@ -1,14 +1,26 @@
 $dark-gray: #202121;
+$light-gray-hover: rgba(32, 33, 33, 0.4);
 $dark-gray-hover: rgba(32, 33, 33, 0.75);
+$white: #fdfdfd;
 $gray-border: 1px solid #e6eaea;
-$light-bg: #f4f7f6;
+$dark-gray-border: #dbe0df;
+$light-bg: #f6f8f5;
+$gray-text: #a6abab;
+$green-main: #49c5b6;
+$green-darker: #39988f;
+$error: #c62828;
 
 @mixin button {
   text-transform: uppercase;
+  transition: background-color 300ms ease-in-out;
+
+  &:hover {
+    background-color: $white;
+  }
 }
 
 @mixin dark-button {
-  @include button;
+  text-transform: uppercase;
   background-color: $dark-gray;
   color: #f4f7f6;
   font-size: 0.875em;
@@ -25,4 +37,12 @@ $light-bg: #f4f7f6;
 @mixin header-btn-label {
   text-transform: uppercase;
   font-size: 0.8125em;
+}
+
+@function em($pxVal) {
+  @return #{$pxVal/16}em;
+}
+
+@function rem($pxVal) {
+  @return #{$pxVal/16}rem;
 }

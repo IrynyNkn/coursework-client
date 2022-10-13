@@ -1,6 +1,10 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
-function clickAwayListener(ref: React.RefObject<any>, fireEvent: boolean, handleClick: () => void) {
+function clickAwayListener(
+  ref: React.RefObject<any>,
+  fireEvent: boolean,
+  handleClick: () => void
+) {
   useEffect(() => {
     function handleClickOutside(event: any) {
       if (fireEvent && ref?.current && !ref.current.contains(event.target)) {
@@ -13,7 +17,6 @@ function clickAwayListener(ref: React.RefObject<any>, fireEvent: boolean, handle
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [ref, fireEvent]);
-
-};
+}
 
 export default clickAwayListener;

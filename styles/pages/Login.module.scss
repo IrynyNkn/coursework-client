@@ -1,0 +1,39 @@
+@import "styles/vars";
+
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.background {
+  width: 40%;
+  background-image: url("/imgs/gamepads-bg.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.loginWrapper {
+  background-color: $light-bg;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2em;
+}
+
+.loginBox {
+  max-width: 28.125em;
+  width: 100%;
+}
+
+.title {
+  text-align: center;
+  margin-top: 0;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+}

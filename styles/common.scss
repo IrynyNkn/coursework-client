@@ -1,0 +1,62 @@
+@import "styles/vars";
+
+.input-container {
+  width: 100%;
+  position: relative;
+  margin-top: 1.8em;
+  margin-bottom: 0.8em;
+
+  & .input-label {
+    position: absolute;
+    top: 0;
+    transition: top 250ms ease-in-out, margin-left 250ms ease-in-out,
+      font-size 250ms ease-in-out;
+    font-size: 1.1em;
+    margin-left: 0.275em;
+    color: $gray-text;
+  }
+
+  & .input {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    border-bottom: 1.5px solid $dark-gray-border;
+    outline: none;
+    font-size: 1em;
+    padding: 0.25em;
+    color: $dark-gray;
+
+    &:focus,
+    &:valid {
+      & + .input-label {
+        top: -1.375em;
+        font-size: 0.8em;
+        margin-left: 0.125em;
+      }
+    }
+  }
+
+  &.error {
+    & .input-label {
+      color: $error;
+    }
+
+    & .input {
+      border-bottom-color: $error;
+    }
+  }
+}
+
+.green-button {
+  background-color: $green-main;
+  color: #ffffff;
+  text-transform: uppercase;
+  height: em(60);
+  padding: 0 2.1875em;
+  margin-top: 1.4em;
+  transition: background-color 250ms ease-in-out;
+
+  &:hover {
+    background-color: $green-darker;
+  }
+}
