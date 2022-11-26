@@ -50,18 +50,15 @@
 
   &.active {
     background-color: $white;
+
+    & span::after {
+      transform: translateY(-50%) rotate(0deg);
+    }
   }
 
   &:hover {
     & span {
       opacity: 0.5;
-    }
-  }
-
-  &:hover,
-  &.active {
-    & span::after {
-      transform: translateY(-50%) rotate(0deg);
     }
   }
 }
@@ -115,6 +112,7 @@
 }
 
 .tag {
+  // TODO extend existing class
   padding: em(5) em(25);
   color: $dark-gray;
   font-weight: 500;

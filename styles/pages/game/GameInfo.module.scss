@@ -1,0 +1,53 @@
+@import "styles/vars";
+
+.container {
+  flex: 1;
+}
+
+.gameTitle {
+  margin: 0 0 em(16);
+  padding-bottom: em(8);
+  font-size: em(34);
+  font-weight: 600;
+  border-bottom: $gray-border;
+}
+
+.description {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.label {
+  width: calc(100% / 3);
+  font-weight: 500;
+}
+
+.data {
+  width: calc(100% - (100% / 3));
+  margin: 0 0 em(6) 0;
+
+  &.value {
+    font-weight: 600;
+    margin-bottom: em(14);
+  }
+}
+
+.dataBox {
+  display: flex;
+}
+
+.tag {
+  @extend .tag;
+  padding: em(2) em(10);
+  margin: 0 em(8) em(4) 0;
+  border-color: $gray-text;
+}
+
+.ageBox {
+  background-color: $green-darker;
+  display: inline-block;
+  padding: em(2);
+  border-radius: em(4);
+  color: $white;
+  font-weight: 500;
+}

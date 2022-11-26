@@ -1,0 +1,25 @@
+@import "../../vars";
+
+.gameWrapper {
+  @extend .wrapper;
+  margin-top: em(36);
+  margin-bottom: em(60);
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.imageBox {
+  width: 40%;
+  margin: 0 em(32) 0 0;
+}
+
+.gameImage {
+  width: 100%;
+}
+
+.gameDescription {
+  margin: em(20) 0 em(40);
+}

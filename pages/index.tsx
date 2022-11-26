@@ -3,6 +3,8 @@ import Head from "next/head";
 import Layout from "../components/common/Layout";
 import Card from "../components/pages/Card";
 import styles from "/styles/pages/home/Home.module.scss";
+import Filters from "../components/common/Filters";
+import React from "react";
 
 const Home: NextPage = () => {
   return (
@@ -13,13 +15,18 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <div className={styles.gamesList}>
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+        <Filters />
+        <div className={styles.content}>
+          <div className={styles.container}>
+            <div className={styles.gamesList}>
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+            </div>
+          </div>
         </div>
       </Layout>
     </div>

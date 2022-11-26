@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import styles from "../../styles/layout/Sidebar.module.scss";
 import clickAwayListener from "../../utils/hooks/clickAwayListener";
+import { useRouter } from "next/router";
 
 type SidebarPropsType = {
   sideBarIsOpen: boolean;
@@ -8,6 +9,7 @@ type SidebarPropsType = {
 };
 
 const Sidebar = ({ sideBarIsOpen, closeSidebar }: SidebarPropsType) => {
+  const router = useRouter();
   const sidebarRef = useRef(null);
   clickAwayListener(sidebarRef, sideBarIsOpen, closeSidebar);
   const openStyle = sideBarIsOpen ? styles.open : "";
@@ -28,7 +30,12 @@ const Sidebar = ({ sideBarIsOpen, closeSidebar }: SidebarPropsType) => {
           </button>
         </div>
         <ul className={styles.menu}>
-          <li className={styles.menuItem}>Library</li>
+          <li
+            className={styles.menuItem}
+            onClick={() => router.push("/managers")}
+          >
+            Managers
+          </li>
           <li className={styles.menuItem}>Discussions</li>
           <li className={styles.menuItem}>Liked</li>
         </ul>

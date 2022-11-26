@@ -25,13 +25,13 @@
 
     .imgBox::before {
       opacity: 1;
-      top: rem(100);
+      top: rem(125);
     }
   }
 }
 
 .imgBox {
-  height: rem(200);
+  height: rem(250);
 
   & img {
     width: 100%;

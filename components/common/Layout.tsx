@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Header from "./Header";
 import styles from "../../styles/layout/Layout.module.scss";
-import Filters from "./Filters";
 import Sidebar from "./Sidebar";
 
 type LayoutPropsType = {
@@ -19,10 +18,7 @@ const Layout = ({ children }: LayoutPropsType) => {
       />
       <main className={styles.main}>
         <div className={styles.placeholder} />
-        <Filters />
-        <div className={styles.content}>
-          <div className={styles.container}>{children}</div>
-        </div>
+        <div className={styles.content}>{children}</div>
       </main>
     </>
   );

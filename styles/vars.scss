@@ -2,13 +2,24 @@ $dark-gray: #202121;
 $light-gray-hover: rgba(32, 33, 33, 0.4);
 $dark-gray-hover: rgba(32, 33, 33, 0.75);
 $white: #fdfdfd;
+$gray: #d9d9d9;
 $gray-border: 1px solid #e6eaea;
 $dark-gray-border: #dbe0df;
 $light-bg: #f6f8f5;
 $gray-text: #a6abab;
 $green-main: #49c5b6;
+$green-light: rgba(73, 197, 182, 0.35);
 $green-darker: #39988f;
+$pastel-red: #ff6061;
 $error: #c62828;
+
+@function em($pxVal) {
+  @return #{$pxVal/16}em;
+}
+
+@function rem($pxVal) {
+  @return #{$pxVal/16}rem;
+}
 
 @mixin button {
   text-transform: uppercase;
@@ -39,10 +50,21 @@ $error: #c62828;
   font-size: 0.8125em;
 }
 
-@function em($pxVal) {
-  @return #{$pxVal/16}em;
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-@function rem($pxVal) {
-  @return #{$pxVal/16}rem;
+.tag {
+  color: $dark-gray;
+  font-weight: 500;
+  border: 1.2px solid #dcdfdf;
+  border-radius: em(30);
+  transition: color 250ms ease-in-out, border-color 250ms ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    color: $green-main;
+    border-color: $green-main;
+  }
 }
