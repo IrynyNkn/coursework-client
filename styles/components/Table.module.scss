@@ -1,0 +1,88 @@
+@import "styles/vars";
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: em(8);
+  border-style: hidden;
+
+  .chip {
+    display: inline-block;
+    padding: em(4) em(10);
+    background-color: $green-light;
+    border-radius: em(14);
+    font-size: em(15);
+
+    &:not(:last-child) {
+      margin-right: em(4);
+    }
+  }
+}
+
+.tableHead {
+  background-color: $dark-gray;
+  color: $white;
+  border-radius: em(8);
+  th {
+    padding: em(10);
+    font-weight: 500;
+    text-align: left;
+
+    &:first-child {
+      border-top-left-radius: em(8);
+    }
+
+    &:last-child {
+      border-top-right-radius: em(8);
+      text-align: center;
+    }
+  }
+}
+
+.tableBody {
+  tr {
+    &:nth-of-type(n) {
+      background-color: $white;
+    }
+
+    &:nth-of-type(2n) {
+      background-color: rgba(220, 224, 223, 0.2);
+    }
+  }
+
+  td {
+    padding: em(8);
+
+    &:first-child {
+      font-weight: 600;
+    }
+
+    &:last-child {
+      text-align: center;
+    }
+  }
+}
+
+.tableActionsBtn {
+  display: inline-block;
+  padding: em(8) em(10);
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 100ms ease-in-out;
+
+  &:first-of-type {
+    margin-right: em(8);
+  }
+
+  &:hover {
+    background-color: $gray-hover;
+  }
+}
+
+.editAction {
+  color: $green-main;
+}
+
+.deleteAction {
+  color: $error;
+}

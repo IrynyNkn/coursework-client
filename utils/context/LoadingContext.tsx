@@ -6,12 +6,12 @@ type LoadingProviderType = {
 
 type LoadingContextState = {
   loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>> | null;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LoadingContext = createContext<LoadingContextState>({
+export const LoadingContext = createContext<LoadingContextState>({
   loading: false,
-  setLoading: null,
+  setLoading: () => {},
 });
 
 export function LoadingProvider({ children }: LoadingProviderType) {

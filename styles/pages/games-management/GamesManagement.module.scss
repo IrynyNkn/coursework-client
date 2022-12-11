@@ -1,0 +1,16 @@
+@import "/styles/vars";
+
+.headerBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  margin: em(24) 0;
+}
+
+.addBtn {
+  @include button();
+  @include dark-button();
+}

@@ -32,11 +32,9 @@ const Sidebar = ({ sideBarIsOpen, closeSidebar }: SidebarPropsType) => {
         <ul className={styles.menu}>
           <li
             className={styles.menuItem}
-            onClick={() => router.push("/managers")}
-          >
-            Managers
-          </li>
-          <li className={styles.menuItem}>Discussions</li>
+            onClick={() => router.push("/games-management")}
+          >Games Management</li>
+          <li className={styles.menuItem}>Users</li>
           <li className={styles.menuItem}>Liked</li>
         </ul>
       </div>

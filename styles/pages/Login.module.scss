@@ -1,19 +1,32 @@
 @import "styles/vars";
 
-.container {
-  display: flex;
-  min-height: 100vh;
-}
-
-.background {
+@mixin imageBg($url) {
   width: 40%;
-  background-image: url("/imgs/gamepads-bg.jpeg");
+  background-image: url(#{$url});
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50% 50%;
 }
 
-.loginWrapper {
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.backgroundLogin {
+  //width: 40%;
+  //background-image: url("/imgs/gamepads-bg.jpeg");
+  //background-repeat: no-repeat;
+  //background-size: cover;
+  //background-position: 50% 50%;
+  @include imageBg("/imgs/gamepads-bg.jpeg");
+}
+
+.backgroundSignup {
+  @include imageBg("/imgs/game-dino.jpeg");
+}
+
+.contentWrapper {
   background-color: $light-bg;
   flex: 1;
   display: flex;
@@ -36,4 +49,14 @@
 .loginForm {
   display: flex;
   flex-direction: column;
+}
+
+.message {
+  margin-top: em(14);
+
+  & a {
+    color: $green-main;
+    text-decoration: underline;
+    font-weight: 600;
+  }
 }
