@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from "../../styles/components/Table.module.scss";
-import TableActions from "./TableActions";
+import styles from '../../styles/components/Table.module.scss';
+import TableActions from './TableActions';
 
 const Table = () => {
   return (
@@ -8,21 +8,11 @@ const Table = () => {
       <table className={styles.table}>
         <thead className={styles.tableHead}>
           <tr>
-            <th>
-              #
-            </th>
-            <th>
-              Title
-            </th>
-            <th>
-              Genres
-            </th>
-            <th>
-              Release Year
-            </th>
-            <th>
-              Actions
-            </th>
+            <th>#</th>
+            <th>Title</th>
+            <th>Genres</th>
+            <th>Release Year</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody className={styles.tableBody}>
@@ -38,7 +28,10 @@ const Table = () => {
           <tr>
             <td>1</td>
             <td>Some title</td>
-            <td><span className={styles.chip}>genre</span><span className={styles.chip}>genre2</span></td>
+            <td>
+              <span className={styles.chip}>genre</span>
+              <span className={styles.chip}>genre2</span>
+            </td>
             <td>2020</td>
             <td>
               <TableActions />
@@ -54,9 +47,7 @@ const Table = () => {
             </td>
           </tr>
         </tbody>
-        <tfoot>
-
-        </tfoot>
+        <tfoot></tfoot>
       </table>
     </div>
   );

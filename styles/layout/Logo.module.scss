@@ -1,5 +1,5 @@
-@import "styles/vars";
-@import url("https://fonts.googleapis.com/css2?family=Silkscreen&display=swap");
+@import 'styles/vars';
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
 
 .logo {
   display: flex;
@@ -16,7 +16,7 @@
 
 .logoTitle {
   color: #000000;
-  font-family: "Silkscreen", cursive;
+  font-family: 'Silkscreen', cursive;
   font-size: 1em;
   text-transform: uppercase;
 }

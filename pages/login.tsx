@@ -1,33 +1,37 @@
-import React from "react";
-import styles from "/styles/pages/Login.module.scss";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import {useForm} from "react-hook-form";
-import {LoginDto} from "../utils/types/auth";
-import {useLoading} from "../utils/hooks/useLoading";
-import {emailRegExp} from "../utils/regExp";
-import {proxyUrl} from "../utils/consts";
-import {saveTokenToLocalStorage} from "../utils/auth";
-import {toast} from "react-toastify";
+import React from 'react';
+import styles from '/styles/pages/Login.module.scss';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { LoginDto } from '../utils/types/auth';
+import { useLoading } from '../utils/hooks/useLoading';
+import { emailRegExp } from '../utils/regExp';
+import { proxyUrl } from '../utils/consts';
+import { saveTokenToLocalStorage } from '../utils/auth';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const router = useRouter();
   const { setLoading } = useLoading();
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginDto>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginDto>();
 
   const onSubmit = async (data: LoginDto) => {
     setLoading(true);
     try {
       const response = await fetch(`${proxyUrl}/auth/login`, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         method: 'POST',
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       const result = await response.json();
 
-      if(!result.error) {
+      if (!result.error) {
         const token = result.data.token;
         saveTokenToLocalStorage(token);
         await router.push('/');
@@ -40,7 +44,7 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <div className={styles.container}>
@@ -55,18 +59,19 @@ const Login = () => {
                 placeholder={'Email'}
                 {...register('email', {
                   required: true,
-                  pattern: emailRegExp
+                  pattern: emailRegExp,
                 })}
               />
               <p className="input-label">Email</p>
             </label>
-            <label className={`input-container ${errors.password ? 'error' : ''}`}>
+            <label
+              className={`input-container ${errors.password ? 'error' : ''}`}>
               <input
                 className="input"
                 type="password"
                 placeholder={'Password'}
                 {...register('password', {
-                  required: true
+                  required: true,
                 })}
               />
               <p className="input-label">Password</p>
@@ -75,7 +80,10 @@ const Login = () => {
               Login Now
             </button>
           </form>
-          <p className={styles.message}>Have not registered yet? <Link href={'/register'}>Register here</Link></p>
+          <p className={styles.message}>
+            Have not registered yet?{' '}
+            <Link href={'/register'}>Register here</Link>
+          </p>
         </div>
       </div>
     </div>

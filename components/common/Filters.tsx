@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react";
-import styles from "../../styles/components/Filters.module.scss";
-import { FaFilter } from "react-icons/fa";
-import { filterCategories } from "../../utils/consts";
-import clickAwayListener from "../../utils/hooks/clickAwayListener";
-import { FilterCategoriesType } from "../../utils/types/filter";
+import React, { useRef, useState } from 'react';
+import styles from '../../styles/components/Filters.module.scss';
+import { FaFilter } from 'react-icons/fa';
+import { filterCategories } from '../../utils/consts';
+import clickAwayListener from '../../utils/hooks/clickAwayListener';
+import { FilterCategoriesType } from '../../utils/types/filter';
 
 const Filters = () => {
   const [currentFilter, setCurrentFilter] =
@@ -25,8 +25,7 @@ const Filters = () => {
             <button
               key={idx}
               className={`${styles.filterButton} ${isActive && styles.active}`}
-              onClick={() => setCurrentFilter(category)}
-            >
+              onClick={() => setCurrentFilter(category)}>
               <span>{category.label}</span>
             </button>
           );
@@ -34,9 +33,8 @@ const Filters = () => {
       </div>
       <div
         className={`${styles.filtersModal} ${
-          currentFilter ? styles.modalOpen : ""
-        }`}
-      >
+          currentFilter ? styles.modalOpen : ''
+        }`}>
         <p className={styles.tagsLabel}>Tags</p>
         <ul className={styles.tagContainer}>
           {currentFilter &&

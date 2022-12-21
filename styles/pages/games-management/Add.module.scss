@@ -1,4 +1,4 @@
-@import "styles/vars";
+@import 'styles/vars';
 
 .container {
   @extend .wrapper;
@@ -27,7 +27,8 @@
       color: $error;
     }
 
-    & .input, & .textarea {
+    & .input,
+    & .textarea {
       border-color: $error;
 
       &::placeholder {
@@ -97,7 +98,7 @@
 
   transition: background-color 250ms ease-in-out;
 
-  input[type="file"] {
+  input[type='file'] {
     display: none;
   }
 

@@ -1,4 +1,4 @@
-@import "styles/vars";
+@import 'styles/vars';
 
 .commentsBox {
   max-width: 900px;
@@ -33,7 +33,7 @@
   font-size: em(14);
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     left: rem(-12);
     top: calc(50% - 2px);
@@ -88,4 +88,14 @@
 .replies {
   margin-left: em(72);
   margin-top: em(20);
+}
+
+.nestedCommentBox {
+  margin-bottom: em(16);
+}
+
+.userMention {
+  @extend .replyUserMention;
+
+  margin-right: em(6);
 }

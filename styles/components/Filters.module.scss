@@ -1,4 +1,4 @@
-@import "styles/vars";
+@import 'styles/vars';
 
 .container {
   height: rem(69);
@@ -36,7 +36,7 @@
     transition: opacity 250ms ease-in-out;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 50%;
       right: -14px;

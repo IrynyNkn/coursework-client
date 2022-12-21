@@ -1,4 +1,4 @@
-@import "../../vars";
+@import '../../vars';
 
 .gameWrapper {
   @extend .wrapper;
@@ -20,6 +20,12 @@
   width: 100%;
 }
 
-.gameDescription {
+.gameDescriptionWrapper {
   margin: em(20) 0 em(40);
+}
+
+.descriptionLabel {
+  margin-bottom: em(10);
+  font-weight: 500;
+  font-size: em(18);
 }

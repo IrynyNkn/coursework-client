@@ -1,4 +1,4 @@
-@import "styles/vars";
+@import 'styles/vars';
 
 @mixin imageBg($url) {
   width: 40%;
@@ -19,11 +19,11 @@
   //background-repeat: no-repeat;
   //background-size: cover;
   //background-position: 50% 50%;
-  @include imageBg("/imgs/gamepads-bg.jpeg");
+  @include imageBg('/imgs/gamepads-bg.jpeg');
 }
 
 .backgroundSignup {
-  @include imageBg("/imgs/game-dino.jpeg");
+  @include imageBg('/imgs/game-dino.jpeg');
 }
 
 .contentWrapper {

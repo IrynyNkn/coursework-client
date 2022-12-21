@@ -1,4 +1,4 @@
-@import "vars";
+@import 'vars';
 
 .pagination {
   @extend .wrapper;
@@ -22,7 +22,7 @@
 
   & .next,
   & .previous,
-  & .pagination-page{
+  & .pagination-page {
     cursor: pointer;
   }
 
@@ -55,6 +55,5 @@
     &:hover {
       background-color: $dark-gray;
     }
-
   }
 }

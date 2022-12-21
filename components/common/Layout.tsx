@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import Header from "./Header";
-import styles from "../../styles/layout/Layout.module.scss";
-import Sidebar from "./Sidebar";
-import {useLoading} from "../../utils/hooks/useLoading";
-import Loader from "./Loader";
+import React, { useState } from 'react';
+import Header from './Header';
+import styles from '../../styles/layout/Layout.module.scss';
+import Sidebar from './Sidebar';
+import { useLoading } from '../../utils/hooks/useLoading';
+import Loader from './Loader';
 
 type LayoutPropsType = {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ type LayoutPropsType = {
 
 const Layout = ({ children }: LayoutPropsType) => {
   const [sideBarIsOpen, setSidebarOpen] = useState<boolean>(false);
-  const {loading} = useLoading()
+  const { loading } = useLoading();
 
   return (
     <>

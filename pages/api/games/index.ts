@@ -1,29 +1,26 @@
-import {NextApiRequest, NextApiResponse} from "next";
-import {apiUrl} from "../../../utils/consts";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { apiUrl } from '../../../utils/consts';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export const getGameById = async (
+  accessToken: string | undefined | null,
+  id: string
+) => {
+  let game = null;
 
-  res.status(200).json({message: 'Success'});
-  // try {
-  //   if(req.method === 'POST') {
-  //     const response = await fetch(`${apiUrl}/games`, {
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       method: 'POST',
-  //       body: JSON.stringify(req.body),
-  //     });
-  //     const result = await response.json();
-  //     console.log('Result', result)
-  //
-  //     if(!result.error) {
-  //       res.status(response.status).json({data: result.data});
-  //     } else {
-  //       res.status(response.status).json(result);
-  //     }
-  //   }
-  // } catch (e) {
-  //   console.log('Error on login', e);
-  //   res.status(500).json({message: 'Internal Server Error', error: 'Error 500'});
-  // }
-}
+  try {
+    const res = await fetch(`${apiUrl}/games/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const result = await res.json();
+
+    if (!result.error && result.data) {
+      game = result.data;
+    }
+  } catch (e) {
+    console.log('Error while querying game by id', e);
+  }
+
+  return game;
+};

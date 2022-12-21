@@ -1,15 +1,15 @@
-import { FilterCategoriesType } from "./types/filter";
+import { FilterCategoriesType } from './types/filter';
 export const apiUrl = 'http://localhost:5050';
 export const proxyUrl = 'http://localhost:3000/api';
 
 export const filterCategories: FilterCategoriesType[] = [
   {
-    label: "Genre",
-    tags: ["Action", "Shooter", "Strategy"],
+    label: 'Genre',
+    tags: ['Action', 'Shooter', 'Strategy'],
   },
   {
-    label: "Page Modes",
-    tags: ["Free", "Multiplayer", "Singleplayer"],
+    label: 'Page Modes',
+    tags: ['Free', 'Multiplayer', 'Singleplayer'],
   },
 ];
 
@@ -19,5 +19,5 @@ export const ageRestrictions = [
   { value: '12', label: '12+' },
   { value: '16', label: '16+' },
   { value: '18', label: '18+' },
-  { value: '21', label: '21+' }
-]
+  { value: '21', label: '21+' },
+];

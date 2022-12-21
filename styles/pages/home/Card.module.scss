@@ -1,11 +1,11 @@
-@import "../../vars";
+@import '../../vars';
 
 .card {
   background-color: $white;
   position: relative;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -40,7 +40,7 @@
   }
 
   &::before {
-    content: "See Details";
+    content: 'See Details';
     position: absolute;
     top: 0;
     left: 50%;
@@ -72,7 +72,32 @@
   line-height: rem(18);
   margin-bottom: rem(8);
 
-  & span {
+  display: flex;
+
+  & .title {
     font-weight: 500;
+    margin: em(2) em(8) 0 0;
+    min-width: rem(70);
+  }
+}
+
+.itemsList {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.chip {
+  background-color: $green-light;
+  margin-right: em(4);
+  margin-bottom: em(4);
+  padding: em(4) em(8);
+  border-radius: em(14);
+}
+
+.publisher {
+  align-items: center;
+
+  & .title {
+    margin-top: 0;
   }
 }

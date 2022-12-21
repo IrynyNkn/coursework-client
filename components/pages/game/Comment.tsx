@@ -1,72 +1,105 @@
-import React, { useState } from "react";
-import styles from "/styles/pages/game/Comments.module.scss";
-import UserBadge from "../../common/UserBadge";
-import { BsSuitHeartFill } from "react-icons/bs";
-import Reply from "./Reply";
+import React, { useMemo, useState } from 'react';
+import styles from '/styles/pages/game/Comments.module.scss';
+import Reply from './Reply';
+import SubComment from './SubComment';
+import { CommentType, ReplyDataType } from '../../../utils/types/games';
+import useCurrentUser from '../../../utils/hooks/useCurrentUser';
 
-const replies = [1, 2, 3];
-
-type SubCommentPropsType = {
-  isReply?: boolean;
-  enableReply: () => void;
+type CommentProps = {
+  commentData: CommentType | null;
+  comments: CommentType[];
+  // currentUser: UserType | null
 };
 
-const SubComment = ({ isReply = false, enableReply }: SubCommentPropsType) => {
-  return (
-    <div className={styles.flexBox}>
-      <UserBadge size={isReply ? "small" : "large"} badgeColor={"#49c5b6"} />
-      <div className={styles.commentBody}>
-        <div className={styles.userInfoBox}>
-          <p className={styles.userName}>Iry Nkn</p>
-          <p className={styles.timeStamp}>3 days ago</p>
-        </div>
-        <p>
-          Pellentesque habitant morbi tristique senectus et netus et malesuada
-          fames ac turpis egestas. Pellentesque rutrum venenatis lectus. Vivamus
-          tempus sit amet elit id pellentesque. In sagittis tincidunt dictum. In
-          consectetur orci non odio lacinia semper ut vel neque. Mauris eu
-          turpis ante. Nunc elementum, diam sed accumsan efficitur, metus enim
-          fermentum est, id varius felis lectus id tortor. Nam sem felis, auctor
-          vel tellus at, sagittis convallis erat. Nulla dapibus at magna id
-          sodales. Pellentesque lacinia pulvinar tellus a commodo. Sed viverra
-          lacinia justo. Nullam vel tempor nisi. Etiam commodo porta lorem sit
-          amet vestibulum. Integer at elementum mauris.
-        </p>
-        <div className={styles.actionsPanel}>
-          <button className={styles.replyBtn} onClick={enableReply}>
-            Reply
-          </button>
-          <div className={styles.likeWrapper}>
-            <BsSuitHeartFill size={20} />
-            <p className={styles.likesCount}>20</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+type NestedReplyType = ReplyDataType & {
+  enableNestedReply: boolean;
+  mentionedUser?: string;
 };
 
-const Comment = () => {
+const Comment = ({ commentData, comments }: CommentProps) => {
+  const { data: currentUser } = useCurrentUser();
   const [showAllReplies, setShowAllReplies] = useState();
-  const [enableReply, setEnableReply] = useState<boolean>(false);
-  const [enableNestedReply, setEnableNestedReply] = useState<boolean>(false);
+  const [enableReply, setEnableReply] = useState<NestedReplyType>({
+    gameDataId: '',
+    parentId: null,
+    enableNestedReply: false,
+  });
+  const [enableNestedReply, setEnableNestedReply] = useState<NestedReplyType>({
+    gameDataId: '',
+    parentId: null,
+    enableNestedReply: false,
+  });
+
+  const nestedComments = useMemo(() => {
+    return comments.filter((cmt) => cmt?.parentId === commentData?.id);
+  }, [comments, commentData]);
 
   return (
     <div>
-      <SubComment enableReply={() => setEnableReply(true)} />
-      <div className={styles.replies}>
-        {enableReply && (
-          <Reply isReply={true} close={() => setEnableReply(false)} />
-        )}
+      {commentData && !commentData?.parentId && (
         <SubComment
-          enableReply={() => setEnableNestedReply(true)}
-          isReply={true}
+          commentData={commentData}
+          enableReply={() =>
+            setEnableReply({
+              gameDataId: commentData.gameId,
+              parentId: commentData.id,
+              enableNestedReply: true,
+            })
+          }
+          currentUserId={currentUser?.id || ''}
         />
-        {enableNestedReply && (
+      )}
+      <div className={styles.replies}>
+        {enableReply.enableNestedReply && (
           <Reply
             isReply={true}
-            parentReplyOwner={"user1212"}
-            close={() => setEnableNestedReply(false)}
+            close={() =>
+              setEnableReply({
+                ...enableReply,
+                enableNestedReply: false,
+              })
+            }
+            replyDataType={{
+              gameDataId: enableReply.gameDataId,
+              parentId: enableReply.parentId,
+            }}
+            userId={currentUser?.id}
+          />
+        )}
+        {nestedComments?.length
+          ? nestedComments.map((cmt, idx) => (
+              <div key={idx} className={styles.nestedCommentBox}>
+                <SubComment
+                  commentData={cmt}
+                  enableReply={() =>
+                    setEnableNestedReply({
+                      gameDataId: cmt.gameId,
+                      parentId: cmt.parentId,
+                      enableNestedReply: true,
+                      mentionedUser: cmt.user.userName,
+                    })
+                  }
+                  isReply={true}
+                  currentUserId={currentUser?.id || ''}
+                />
+              </div>
+            ))
+          : null}
+        {enableNestedReply.enableNestedReply && (
+          <Reply
+            isReply={true}
+            parentReplyOwner={enableNestedReply.mentionedUser}
+            close={() =>
+              setEnableNestedReply({
+                ...enableNestedReply,
+                enableNestedReply: false,
+              })
+            }
+            replyDataType={{
+              gameDataId: enableNestedReply.gameDataId,
+              parentId: enableNestedReply.parentId,
+            }}
+            userId={currentUser?.id}
           />
         )}
       </div>

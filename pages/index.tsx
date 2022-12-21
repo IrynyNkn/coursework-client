@@ -1,30 +1,36 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Layout from "../components/common/Layout";
-import Card from "../components/pages/Card";
-import styles from "/styles/pages/home/Home.module.scss";
-import Filters from "../components/common/Filters";
-import React, {useState} from "react";
-import GamesList from "../components/pages/game/GamesList";
-import ReactPaginate from "react-paginate";
-import {GrNext, GrPrevious} from "react-icons/gr";
+import styles from '/styles/pages/home/Home.module.scss';
+import Filters from '../components/common/Filters';
+import React from 'react';
+import GamesList from '../components/pages/game/GamesList';
+import ReactPaginate from 'react-paginate';
+import { GetServerSideProps } from 'next';
+import { apiUrl } from '../utils/consts';
+import { GameListType } from '../utils/types/games';
+import { useRouter } from 'next/router';
 
-const Home: NextPage = () => {
-  const itemsPerPage = 6;
-  const [games, setGames] = useState(['', '', '', '', '', '', '', ''])
-  const [itemOffset, setItemOffset] = useState(0);
+type HomePropsType = {
+  totalCount: number;
+  games: GameListType[];
+  take: number;
+  skip: number;
+};
 
-  // Simulate fetching items from another resources.
-  // (This could be items from props; or items loaded in a local state
-  // from an API endpoint with useEffect and useState)
-  const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-  const currentItems = games.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(games.length / itemsPerPage);
-  console.log('Page count', pageCount)
-  const handlePageClick = (event: any) => {
-    const newOffset = (event.selected * itemsPerPage) % games.length;
-    setItemOffset(newOffset);
+const Home = ({ totalCount, games, take, skip }: HomePropsType) => {
+  const router = useRouter();
+  const itemsPerPage = 9;
+  const endOffset = skip + itemsPerPage;
+  const pageCount = Math.ceil(totalCount / itemsPerPage);
+
+  const pagginationHandler = async (event: any) => {
+    const currentPath = router.pathname;
+    const skipValue = (event.selected * itemsPerPage) % totalCount;
+
+    await router.push({
+      pathname: currentPath,
+      query: {
+        skip: skipValue,
+      },
+    });
   };
 
   return (
@@ -32,19 +38,19 @@ const Home: NextPage = () => {
       <Filters />
       <div className={styles.content}>
         <div className={styles.container}>
-          <GamesList games={currentItems} />
+          <GamesList games={games} />
           <ReactPaginate
             containerClassName={'pagination'}
             activeClassName={'active'}
             breakLabel="..."
-            onPageChange={handlePageClick}
+            onPageChange={pagginationHandler}
             pageRangeDisplayed={5}
             pageCount={pageCount}
             renderOnZeroPageCount={() => null}
             pageClassName={'pagination-page'}
-            nextClassName={`next ${endOffset >= games.length ? 'hidden' : ''}`}
+            nextClassName={`next ${endOffset >= totalCount ? 'hidden' : ''}`}
             nextLabel={'Next'}
-            previousClassName={`previous ${itemOffset === 0 ? 'hidden' : ''}`}
+            previousClassName={`previous ${skip <= 0 ? 'hidden' : ''}`}
             previousLabel={'Previous'}
           />
         </div>
@@ -54,3 +60,45 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+  req,
+}) => {
+  const take = query.take || 9;
+  const skip = query.skip || 0;
+  const accessToken = req.cookies.GamelyAuthToken;
+  let games = [];
+  let totalCount = 0;
+
+  try {
+    const res = await fetch(`${apiUrl}/games?take=${take}&skip=${skip}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const result = await res.json();
+
+    if (!result.error && result.data) {
+      games = result.data.map((game: any) => {
+        return {
+          ...game,
+          genres: game.genres.map((genre: any) => genre.genre),
+          platforms: game.platforms.map((plt: any) => plt.platform),
+        };
+      });
+      totalCount = result.meta.totalCount;
+    }
+  } catch (e) {
+    console.log('Error while fetching games', e);
+  }
+
+  return {
+    props: {
+      totalCount,
+      games,
+      take,
+      skip,
+    },
+  };
+};

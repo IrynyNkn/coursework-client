@@ -1,7 +1,7 @@
-import React from "react";
-import styles from "../../styles/layout/Header.module.scss";
-import Logo from "./Logo";
-import { useRouter } from "next/router";
+import React from 'react';
+import styles from '../../styles/layout/Header.module.scss';
+import Logo from './Logo';
+import { useRouter } from 'next/router';
 
 type HeaderPropsType = {
   sideBarIsOpen: boolean;
@@ -10,9 +10,9 @@ type HeaderPropsType = {
 
 const Header = ({ sideBarIsOpen, setSidebarOpen }: HeaderPropsType) => {
   const router = useRouter();
-  const openStyle = sideBarIsOpen ? styles.open : "";
+  const openStyle = sideBarIsOpen ? styles.open : '';
   const logIn = async () => {
-    await router.push("/login");
+    await router.push('/login');
   };
 
   return (
@@ -20,8 +20,7 @@ const Header = ({ sideBarIsOpen, setSidebarOpen }: HeaderPropsType) => {
       <div className={`${styles.burgerMenu}`}>
         <button
           onClick={() => setSidebarOpen(true)}
-          className={`${styles.burgerContainer} ${openStyle}`}
-        >
+          className={`${styles.burgerContainer} ${openStyle}`}>
           <div className={styles.burgerBtn}></div>
           <span className={styles.menuLabel}>Menu</span>
         </button>

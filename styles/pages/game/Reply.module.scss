@@ -1,4 +1,4 @@
-@import "styles/vars";
+@import 'styles/vars';
 
 @mixin btn {
   padding: em(10) em(15);
@@ -34,7 +34,7 @@
   //}
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     left: 0;
     bottom: -1px;
@@ -80,10 +80,8 @@
 }
 
 .parentReplyOwner {
-  display: inline-block;
-  background-color: $gray;
-  padding: em(2) em(4);
-  border-radius: em(4);
+  @extend .replyUserMention;
+
   position: absolute;
   top: em(6);
 }

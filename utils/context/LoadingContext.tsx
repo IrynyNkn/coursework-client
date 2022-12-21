@@ -1,13 +1,13 @@
-import React, {createContext, useState} from "react";
+import React, { createContext, useState } from 'react';
 
 type LoadingProviderType = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 type LoadingContextState = {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
 export const LoadingContext = createContext<LoadingContextState>({
   loading: false,
@@ -21,4 +21,3 @@ export function LoadingProvider({ children }: LoadingProviderType) {
     <LoadingContext.Provider value={value}>{children}</LoadingContext.Provider>
   );
 }
-
