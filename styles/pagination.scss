@@ -57,3 +57,22 @@
     }
   }
 }
+
+.games-table-pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  color: white;
+
+  .arrow-label {
+    cursor: pointer;
+
+    &.next {
+      margin-left: em(16);
+    }
+
+    & svg polyline {
+      stroke: white;
+    }
+  }
+}

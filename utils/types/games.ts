@@ -19,12 +19,12 @@ export type GameFormType = {
   ageRestriction: string;
   releaseYear: string;
   genres: {
-    value: 'string';
-    label: 'string';
+    value: string;
+    label: string;
   }[];
   platforms: {
-    value: 'string';
-    label: 'string';
+    value: string;
+    label: string;
   }[];
 };
 
@@ -90,4 +90,19 @@ export type RatingType = {
   id: string;
   userId: string;
   value: number;
+};
+
+export type EditButtonFunctionType = (id: string) => Promise<boolean>;
+export type DeleteButtonFunctionType = (id: string) => void;
+
+export type CellRenderMethodsType = {
+  renderCell?: {
+    [key: string]: (val: any[] | string) => JSX.Element[];
+  };
+  onEditClick: EditButtonFunctionType;
+  onDeleteClick: DeleteButtonFunctionType;
+};
+
+export type GameFieldsFormType = {
+  name: string;
 };

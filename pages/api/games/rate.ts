@@ -15,7 +15,6 @@ export default async function handler(
         body: JSON.stringify(req.body),
       });
       const result = await response.json();
-      console.log('Rate result', result);
 
       if (!result.error) {
         res.status(response.status).json(result);
@@ -30,7 +29,7 @@ export default async function handler(
       }
     }
   } catch (e) {
-    console.log('Error on login', e);
+    console.log('Error while rating', e);
     res
       .status(500)
       .json({ message: 'Internal Server Error', error: 'Error 500' });

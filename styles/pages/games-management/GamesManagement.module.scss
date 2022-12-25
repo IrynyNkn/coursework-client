@@ -1,5 +1,9 @@
 @import '/styles/vars';
 
+.container {
+  margin-bottom: em(40);
+}
+
 .headerBox {
   display: flex;
   justify-content: space-between;
@@ -7,10 +11,22 @@
 }
 
 .title {
-  margin: em(24) 0;
+  margin: em(24) 0 em(16);
 }
 
 .addBtn {
   @include button();
   @include dark-button();
+}
+
+.chip {
+  display: inline-block;
+  padding: em(4) em(10);
+  background-color: $green-light;
+  border-radius: em(14);
+  font-size: em(15);
+
+  &:not(:last-child) {
+    margin-right: em(4);
+  }
 }

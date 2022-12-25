@@ -6,6 +6,7 @@ import { ageRestrictions, apiUrl } from '../../utils/consts';
 import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 import { TbFileUpload } from 'react-icons/tb';
 import {
+  GameDataType,
   GameFormType,
   GenreType,
   PlatformsType,
@@ -16,38 +17,23 @@ import { BiImageAdd } from 'react-icons/bi';
 import { useDropzone } from 'react-dropzone';
 import { GetServerSideProps } from 'next';
 import { toast } from 'react-toastify';
-
-const selectStyles = (isError: boolean) => ({
-  control: (baseStyles: any, state: any) => ({
-    ...baseStyles,
-    borderColor: isError ? '#c62828' : state.isFocused ? '#49c5b6' : '#dbe0df',
-    boxShadow: 'none',
-    paddingTop: 4,
-    paddingBottom: 4,
-    '&:hover': {
-      borderColor: '#49c5b6',
-    },
-  }),
-  option: (baseStyles: any, state: any) => ({
-    ...baseStyles,
-    backgroundColor: state.isSelected ? '#49c5b6' : '',
-    '&:hover': {
-      backgroundColor: state.isSelected ? '#49c5b6' : 'rgba(73,197,182,0.2)',
-    },
-  }),
-  placeholder: (baseStyles: any) => ({
-    ...baseStyles,
-    color: isError ? '#c62828' : '#a6abab',
-  }),
-});
+import { selectStyles } from '../../utils';
+import { useRouter } from 'next/router';
+import getCookies from '../../utils/getCookies';
+import { authTokenName } from '../../utils/auth';
 
 type AddGameProps = {
   platforms: PlatformsType[] | null;
   genres: GenreType[] | null;
   publishers: PublisherType[] | null;
+  gameData: GameDataType;
 };
 
-const Add = ({ platforms, genres, publishers }: AddGameProps) => {
+const Add = ({ platforms, genres, publishers, gameData }: AddGameProps) => {
+  const {
+    query: { gameId },
+    push,
+  } = useRouter();
   const { setLoading } = useLoading();
   const [selectedImage, setSelectedImage] = useState<File | null | undefined>();
   const [preview, setPreview] = useState<string>();
@@ -80,13 +66,34 @@ const Add = ({ platforms, genres, publishers }: AddGameProps) => {
     register,
     handleSubmit,
     control,
-    watch,
     formState: { errors },
-  } = useForm<GameFormType>();
+  } = useForm<GameFormType>({
+    defaultValues: gameData
+      ? {
+          title: gameData.title,
+          description: gameData.description,
+          publisherId: gameData.publisher.id,
+          ageRestriction: gameData.ageRestriction.toString(),
+          releaseYear: gameData.releaseYear.toString(),
+          platforms: gameData.platforms.map((plt) => ({
+            // @ts-ignore
+            value: plt.platform.id,
+            // @ts-ignore
+            label: plt.platform.name,
+          })),
+          genres: gameData.genres.map((genre) => ({
+            // @ts-ignore
+            value: genre.genre.id,
+            // @ts-ignore
+            label: genre.genre.name,
+          })),
+        }
+      : {},
+  });
 
   useEffect(() => {
     if (!selectedImage) {
-      setPreview(undefined);
+      setPreview(gameData?.imageLink || undefined);
       return;
     }
 
@@ -123,24 +130,39 @@ const Add = ({ platforms, genres, publishers }: AddGameProps) => {
       JSON.stringify(data.platforms.map((plt) => plt.value))
     );
 
+    let reqMethod: 'POST' | 'PATCH' = 'POST';
+    if (gameId) {
+      reqMethod = 'PATCH';
+    }
+
+    const accessToken = getCookies(authTokenName);
+
     setLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/games`, {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetch(
+        `${apiUrl}/games${reqMethod === 'PATCH' ? '/' + gameId : ''}`,
+        {
+          method: reqMethod,
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       const result = await response.json();
 
-      if (result.error) {
+      if (result.data) {
+        toast.success(
+          `Game is successfully ${reqMethod === 'POST' ? 'created' : 'edited'}`
+        );
+        await push('/games-management');
+      } else {
         const errorMsg =
           typeof result.message === 'string'
             ? result.message
             : result.message[0];
         toast.error(errorMsg || 'Oops, something went wrong');
-      } else {
-        toast.success('Game is successfully created');
       }
-      console.log('Result', result);
     } catch (e) {
       toast.error('Error while creating game');
       console.log('Error while creating game', e);
@@ -207,10 +229,8 @@ const Add = ({ platforms, genres, publishers }: AddGameProps) => {
                 options={genresOptions}
                 placeholder={'Genres'}
                 isMulti={true}
-                value={genresOptions.find(
-                  (c) => c.value === (value as unknown as string)
-                )}
-                onChange={(val) => onChange(val)}
+                value={value}
+                onChange={onChange}
                 styles={{
                   ...selectStyles(!!errors?.genres),
                   multiValue: (baseStyles: any) => ({
@@ -243,10 +263,8 @@ const Add = ({ platforms, genres, publishers }: AddGameProps) => {
                 options={platformsOptions}
                 placeholder={'Platforms'}
                 isMulti={true}
-                value={platformsOptions.find(
-                  (c) => c.value === (value as unknown as string)
-                )}
-                onChange={(val) => onChange(val)}
+                value={value}
+                onChange={onChange}
                 styles={{
                   ...selectStyles(!!errors?.platforms),
                   multiValue: (baseStyles: any) => ({
@@ -368,9 +386,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let platforms = null;
   let genres = null;
   let publishers = null;
+  let gameData = null;
 
   try {
     const accessToken = context.req.cookies.GamelyAuthToken;
+    const gameId = context.query.gameId;
     const resPlatforms = await fetch(`${apiUrl}/platforms`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -386,6 +406,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+    if (gameId) {
+      const resGameData = await fetch(`${apiUrl}/games/${gameId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      gameData = await resGameData.json();
+    }
     platforms = await resPlatforms.json();
     genres = await resGenres.json();
     publishers = await resPublishers.json();
@@ -398,6 +426,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       platforms,
       genres,
       publishers,
+      gameData: gameData?.data || gameData,
     },
   };
 };

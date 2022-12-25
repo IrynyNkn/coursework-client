@@ -39,8 +39,19 @@ const Sidebar = ({ sideBarIsOpen, closeSidebar }: SidebarPropsType) => {
             onClick={() => onNavClick('/games-management')}>
             Games Management
           </li>
-          <li className={styles.menuItem}>Users</li>
-          <li className={styles.menuItem}>Liked</li>
+          <li className={styles.menuItem} onClick={() => onNavClick('/genres')}>
+            Genres
+          </li>
+          <li
+            className={styles.menuItem}
+            onClick={() => onNavClick('/platforms')}>
+            Platforms
+          </li>
+          <li
+            className={styles.menuItem}
+            onClick={() => onNavClick('/publishers')}>
+            Publishers
+          </li>
         </ul>
       </div>
     </div>
