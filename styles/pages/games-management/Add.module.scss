@@ -1,5 +1,12 @@
 @import 'styles/vars';
 
+@mixin box() {
+  max-width: rem(500);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .container {
   @extend .wrapper;
   display: flex;
@@ -13,10 +20,7 @@
 }
 
 .form {
-  max-width: rem(500);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+  @include box;
 }
 
 .inputWrapper {
@@ -135,4 +139,19 @@
 
   border-top-right-radius: em(4);
   border-top-left-radius: em(4);
+}
+
+.userInfo {
+  @include box;
+  margin-bottom: em(10);
+}
+
+.infoBox {
+  display: flex;
+  margin-bottom: em(8);
+}
+
+.infoLabel {
+  margin-right: em(6);
+  font-weight: 500;
 }

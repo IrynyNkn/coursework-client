@@ -52,13 +52,11 @@ export default async function handler(
     } else {
       const errorMessage =
         typeof result.message === 'string' ? result.message : result.message[0];
-      res
-        .status(response.status)
-        .json({
-          data: [],
-          error: result.error || `Error ${response.status}`,
-          message: errorMessage,
-        });
+      res.status(response.status).json({
+        data: [],
+        error: result.error || `Error ${response.status}`,
+        message: errorMessage,
+      });
     }
   } catch (e) {
     console.log('Error while fetching games', e);

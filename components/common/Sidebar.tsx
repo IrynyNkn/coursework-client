@@ -34,6 +34,9 @@ const Sidebar = ({ sideBarIsOpen, closeSidebar }: SidebarPropsType) => {
           </button>
         </div>
         <ul className={styles.menu}>
+          <li className={styles.menuItem} onClick={() => onNavClick('/')}>
+            Games
+          </li>
           <li
             className={styles.menuItem}
             onClick={() => onNavClick('/games-management')}>
@@ -51,6 +54,9 @@ const Sidebar = ({ sideBarIsOpen, closeSidebar }: SidebarPropsType) => {
             className={styles.menuItem}
             onClick={() => onNavClick('/publishers')}>
             Publishers
+          </li>
+          <li className={styles.menuItem} onClick={() => onNavClick('/users')}>
+            Users
           </li>
         </ul>
       </div>

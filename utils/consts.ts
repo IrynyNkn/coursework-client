@@ -21,3 +21,15 @@ export const ageRestrictions = [
   { value: '18', label: '18+' },
   { value: '21', label: '21+' },
 ];
+
+export const rolesOptions = [
+  { value: 'user', label: 'User' },
+  { value: 'manager', label: 'Manager' },
+  { value: 'admin', label: 'Admin' },
+];
+
+export const rolesMapping: { [key: string]: string } = {
+  user: 'User',
+  manager: 'Manager',
+  admin: 'Admin',
+};

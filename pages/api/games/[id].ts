@@ -24,12 +24,10 @@ export default async function handler(
           typeof result.message === 'string'
             ? result.message
             : result.message[0];
-        res
-          .status(response.status)
-          .json({
-            error: result.error || `Error ${response.status}`,
-            message: errorMessage,
-          });
+        res.status(response.status).json({
+          error: result.error || `Error ${response.status}`,
+          message: errorMessage,
+        });
       }
     } catch (e) {
       console.log('Error on game delete', e);
