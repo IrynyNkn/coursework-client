@@ -1,6 +1,7 @@
 import { FilterCategoriesType } from './types/filter';
 export const apiUrl = 'http://localhost:5050';
 export const proxyUrl = 'http://localhost:3000/api';
+export const baseUrl = 'http://localhost:3000';
 
 export const filterCategories: FilterCategoriesType[] = [
   {
@@ -36,4 +37,10 @@ export const rolesMapping: { [key: string]: string } = {
   user: 'User',
   manager: 'Manager',
   admin: 'Admin',
+};
+
+export const userRoles = {
+  MANAGER: 'manager',
+  USER: 'user',
+  ADMIN: 'admin',
 };

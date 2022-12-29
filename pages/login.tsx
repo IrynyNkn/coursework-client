@@ -7,7 +7,7 @@ import { LoginDto } from '../utils/types/auth';
 import { useLoading } from '../utils/hooks/useLoading';
 import { emailRegExp } from '../utils/regExp';
 import { proxyUrl } from '../utils/consts';
-import { saveTokenToLocalStorage } from '../utils/auth';
+import { saveTokenToCookies } from '../utils/auth';
 import { toast } from 'react-toastify';
 
 const Login = () => {
@@ -33,7 +33,7 @@ const Login = () => {
 
       if (!result.error) {
         const token = result.data.token;
-        saveTokenToLocalStorage(token);
+        saveTokenToCookies(token);
         await router.push('/');
       } else {
         toast.error(result.message);

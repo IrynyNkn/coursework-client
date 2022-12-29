@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import styles from '../../styles/layout/Sidebar.module.scss';
 import clickAwayListener from '../../utils/hooks/clickAwayListener';
 import { useRouter } from 'next/router';
+import useCurrentUser from '../../utils/hooks/useCurrentUser';
+import { userRoles } from '../../utils/consts';
 
 type SidebarPropsType = {
   sideBarIsOpen: boolean;
@@ -11,6 +13,8 @@ type SidebarPropsType = {
 const Sidebar = ({ sideBarIsOpen, closeSidebar }: SidebarPropsType) => {
   const router = useRouter();
   const sidebarRef = useRef(null);
+  const { data: currentUser } = useCurrentUser();
+
   clickAwayListener(sidebarRef, sideBarIsOpen, closeSidebar);
   const openStyle = sideBarIsOpen ? styles.open : '';
 
@@ -37,27 +41,38 @@ const Sidebar = ({ sideBarIsOpen, closeSidebar }: SidebarPropsType) => {
           <li className={styles.menuItem} onClick={() => onNavClick('/')}>
             Games
           </li>
-          <li
-            className={styles.menuItem}
-            onClick={() => onNavClick('/games-management')}>
-            Games Management
-          </li>
-          <li className={styles.menuItem} onClick={() => onNavClick('/genres')}>
-            Genres
-          </li>
-          <li
-            className={styles.menuItem}
-            onClick={() => onNavClick('/platforms')}>
-            Platforms
-          </li>
-          <li
-            className={styles.menuItem}
-            onClick={() => onNavClick('/publishers')}>
-            Publishers
-          </li>
-          <li className={styles.menuItem} onClick={() => onNavClick('/users')}>
-            Users
-          </li>
+          {(currentUser?.roles?.includes(userRoles.ADMIN) ||
+            currentUser?.roles?.includes(userRoles.MANAGER)) && (
+            <>
+              <li
+                className={styles.menuItem}
+                onClick={() => onNavClick('/games-management')}>
+                Games Management
+              </li>
+              <li
+                className={styles.menuItem}
+                onClick={() => onNavClick('/genres')}>
+                Genres
+              </li>
+              <li
+                className={styles.menuItem}
+                onClick={() => onNavClick('/platforms')}>
+                Platforms
+              </li>
+              <li
+                className={styles.menuItem}
+                onClick={() => onNavClick('/publishers')}>
+                Publishers
+              </li>
+            </>
+          )}
+          {currentUser?.roles?.includes(userRoles.ADMIN) && (
+            <li
+              className={styles.menuItem}
+              onClick={() => onNavClick('/users')}>
+              Users
+            </li>
+          )}
         </ul>
       </div>
     </div>

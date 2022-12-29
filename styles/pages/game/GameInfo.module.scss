@@ -5,11 +5,8 @@
 }
 
 .gameTitle {
-  margin: 0 0 em(16);
-  padding-bottom: em(8);
   font-size: em(34);
   font-weight: 600;
-  border-bottom: $gray-border;
 }
 
 .description {
@@ -49,5 +46,30 @@
   padding: em(2);
   border-radius: em(4);
   color: $white;
+  font-weight: 500;
+}
+
+.gameHeader {
+  display: flex;
+  align-items: center;
+  border-bottom: $gray-border;
+}
+
+.ratingBox {
+  position: relative;
+  margin-right: em(8);
+}
+
+.ratingStar {
+  color: #49c5b6;
+}
+
+.ratingVal {
+  position: absolute;
+  top: 32%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: em(18);
   font-weight: 500;
 }

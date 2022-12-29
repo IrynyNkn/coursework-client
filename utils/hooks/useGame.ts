@@ -2,9 +2,10 @@ import { useQuery } from 'react-query';
 import { authTokenName } from '../auth';
 import { getGameById } from '../../pages/api/games';
 import { GameDataType } from '../types/games';
+import getCookies from '../getCookies';
 
 const fetchGame = async (id: string) => {
-  const accessToken = localStorage.getItem(authTokenName);
+  const accessToken = getCookies(authTokenName);
   return await getGameById(accessToken, id);
 };
 

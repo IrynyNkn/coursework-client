@@ -8,7 +8,7 @@ import { useLoading } from '../utils/hooks/useLoading';
 import { toast } from 'react-toastify';
 import { proxyUrl } from '../utils/consts';
 import { useRouter } from 'next/router';
-import { saveTokenToLocalStorage } from '../utils/auth';
+import { saveTokenToCookies } from '../utils/auth';
 
 const Register = () => {
   const { setLoading } = useLoading();
@@ -35,7 +35,7 @@ const Register = () => {
 
       if (!result.error) {
         const token = result.data.token;
-        saveTokenToLocalStorage(token);
+        saveTokenToCookies(token);
         await router.push('/');
       } else {
         toast.error(result.message);

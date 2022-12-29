@@ -2,6 +2,7 @@ import React from 'react';
 import styles from '/styles/pages/game/GameInfo.module.scss';
 import { useRouter } from 'next/router';
 import useGame from '../../../utils/hooks/useGame';
+import { AiFillStar } from 'react-icons/ai';
 
 const GameInfo = () => {
   const router = useRouter();
@@ -9,7 +10,15 @@ const GameInfo = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.gameTitle}>{gameData?.title}</h1>
+      <div className={styles.gameHeader}>
+        {!!gameData?.gameRating && (
+          <span className={styles.ratingBox}>
+            <AiFillStar className={styles.ratingStar} size={74} />
+            <span className={styles.ratingVal}>{gameData.gameRating}</span>
+          </span>
+        )}
+        <h1 className={styles.gameTitle}>{gameData?.title}</h1>
+      </div>
       <dl className={styles.description}>
         <dt className={styles.label}>Genre</dt>
         <dd className={`${styles.data} ${styles.dataBox}`}>

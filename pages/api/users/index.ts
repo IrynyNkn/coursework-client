@@ -11,9 +11,12 @@ export const getCurrentUser = async (
       },
     });
     const result = await res.json();
+    console.log('Current User Result', result);
 
     if (!result.error && result.data) {
       user = result.data;
+    } else {
+      // if()
     }
   } catch (e) {
     console.log('Error while querying current user', e);

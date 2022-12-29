@@ -55,6 +55,7 @@ export type GameDataType = {
   releaseYear: number;
   genres: GenreType[];
   platforms: PlatformsType[];
+  gameRating: number;
   ratings: any[];
   comments: any[];
 };

@@ -2,6 +2,8 @@ import React from 'react';
 import styles from '../../styles/layout/Header.module.scss';
 import Logo from './Logo';
 import { useRouter } from 'next/router';
+import useCurrentUser from '../../utils/hooks/useCurrentUser';
+import { authTokenName, eraseCookie } from '../../utils/auth';
 
 type HeaderPropsType = {
   sideBarIsOpen: boolean;
@@ -12,6 +14,12 @@ const Header = ({ sideBarIsOpen, setSidebarOpen }: HeaderPropsType) => {
   const router = useRouter();
   const openStyle = sideBarIsOpen ? styles.open : '';
   const logIn = async () => {
+    await router.push('/login');
+  };
+  const { data: currentUser } = useCurrentUser();
+
+  const logOut = async () => {
+    eraseCookie(authTokenName);
     await router.push('/login');
   };
 
@@ -28,11 +36,19 @@ const Header = ({ sideBarIsOpen, setSidebarOpen }: HeaderPropsType) => {
       <div className={styles.headerBox}>
         <Logo />
       </div>
-      <div className={`${styles.headerBox} ${styles.buttonWrapper}`}>
-        <button onClick={logIn} className={styles.loginButton}>
-          Register / Log in
-        </button>
-      </div>
+      {currentUser?.email ? (
+        <div className={`${styles.headerBox} ${styles.buttonWrapper}`}>
+          <button onClick={logOut} className={styles.loginButton}>
+            Log Out
+          </button>
+        </div>
+      ) : (
+        <div className={`${styles.headerBox} ${styles.buttonWrapper}`}>
+          <button onClick={logIn} className={styles.loginButton}>
+            Register / Log in
+          </button>
+        </div>
+      )}
     </header>
   );
 };
