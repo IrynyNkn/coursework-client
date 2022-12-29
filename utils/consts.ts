@@ -5,12 +5,16 @@ export const proxyUrl = 'http://localhost:3000/api';
 export const filterCategories: FilterCategoriesType[] = [
   {
     label: 'Genre',
-    tags: ['Action', 'Shooter', 'Strategy'],
+    tags: [
+      { id: '', name: 'Action' },
+      { id: '', name: 'Shooter' },
+      { id: '', name: 'Strategy' },
+    ],
   },
-  {
-    label: 'Page Modes',
-    tags: ['Free', 'Multiplayer', 'Singleplayer'],
-  },
+  // {
+  //   label: 'Page Modes',
+  //   tags: ['Free', 'Multiplayer', 'Singleplayer'],
+  // },
 ];
 
 export const ageRestrictions = [

@@ -27,13 +27,15 @@ const Card = ({ gameData }: CardProps) => {
           <h4 className={styles.title}>Genres:</h4>
           <ul className={styles.itemsList}>
             {gameData.genres.map((genre, idx) =>
-              idx < 2 ? (
-                <li key={idx} className={styles.chip}>
-                  {genre.name}
-                </li>
-              ) : (
-                <li className={styles.chip}>{gameData.genres.length}+</li>
-              )
+              idx < 3 ? (
+                idx < 2 ? (
+                  <li key={idx} className={styles.chip}>
+                    {genre.name}
+                  </li>
+                ) : (
+                  <li className={styles.chip}>+{gameData.genres.length - 2}</li>
+                )
+              ) : null
             )}
           </ul>
         </div>
@@ -41,13 +43,17 @@ const Card = ({ gameData }: CardProps) => {
           <h4 className={styles.title}>Platforms:</h4>
           <ul className={styles.itemsList}>
             {gameData.platforms.map((plt, idx) =>
-              idx < 2 ? (
-                <li key={idx} className={styles.chip}>
-                  {plt.name}
-                </li>
-              ) : (
-                <li className={styles.chip}>{gameData.platforms.length}+</li>
-              )
+              idx < 3 ? (
+                idx < 2 ? (
+                  <li key={idx} className={styles.chip}>
+                    {plt.name}
+                  </li>
+                ) : (
+                  <li className={styles.chip}>
+                    +{gameData.platforms.length - 2}
+                  </li>
+                )
+              ) : null
             )}
           </ul>
         </div>

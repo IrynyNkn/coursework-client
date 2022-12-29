@@ -64,6 +64,7 @@ $error: #c62828;
   border-radius: em(30);
   transition: color 250ms ease-in-out, border-color 250ms ease-in-out;
   cursor: pointer;
+  font-size: em(14);
 
   &:hover {
     color: $green-main;

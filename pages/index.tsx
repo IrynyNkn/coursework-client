@@ -7,6 +7,7 @@ import { GetServerSideProps } from 'next';
 import { apiUrl } from '../utils/consts';
 import { GameListType } from '../utils/types/games';
 import { useRouter } from 'next/router';
+import { dehydrate, QueryClient } from 'react-query';
 
 type HomePropsType = {
   totalCount: number;
@@ -67,16 +68,37 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const take = query.take || 9;
   const skip = query.skip || 0;
+  const genres = query.genres ?? '';
+  const publishers = query.publishers ?? '';
+  const platforms = query.platforms ?? '';
   const accessToken = req.cookies.GamelyAuthToken;
   let games = [];
   let totalCount = 0;
 
+  const filtersQuery = `${genres ? '&genres=' + genres : ''}${
+    platforms ? '&platforms=' + platforms : ''
+  }${publishers ? '&publishers=' + publishers : ''}`;
+
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery('platforms', () =>
+    fetch(`${apiUrl}/platforms`).then((res) => res.json())
+  );
+  await queryClient.prefetchQuery('genres', () =>
+    fetch(`${apiUrl}/genres`).then((res) => res.json())
+  );
+  await queryClient.prefetchQuery('publishers', () =>
+    fetch(`${apiUrl}/publishers`).then((res) => res.json())
+  );
+
   try {
-    const res = await fetch(`${apiUrl}/games?take=${take}&skip=${skip}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const res = await fetch(
+      `${apiUrl}/games?take=${take}&skip=${skip}${filtersQuery}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
     const result = await res.json();
 
     if (!result.error && result.data) {
@@ -99,6 +121,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       games,
       take,
       skip,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 };

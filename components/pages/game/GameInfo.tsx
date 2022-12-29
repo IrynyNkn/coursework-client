@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from '/styles/pages/game/GameInfo.module.scss';
-import { GameDataType } from '../../../utils/types/games';
 import { useRouter } from 'next/router';
 import useGame from '../../../utils/hooks/useGame';
 
@@ -15,8 +14,20 @@ const GameInfo = () => {
         <dt className={styles.label}>Genre</dt>
         <dd className={`${styles.data} ${styles.dataBox}`}>
           {gameData?.genres ? (
-            gameData.genres.map((genre) => (
-              <div className={styles.tag}>{genre.name}</div>
+            gameData.genres.map((genre, idx) => (
+              <div
+                onClick={() =>
+                  router.push({
+                    pathname: '/',
+                    query: {
+                      genres: genre.id,
+                    },
+                  })
+                }
+                key={idx}
+                className={styles.tag}>
+                {genre.name}
+              </div>
             ))
           ) : (
             <div>--</div>
@@ -24,13 +35,36 @@ const GameInfo = () => {
         </dd>
         <dt className={styles.label}>Publisher</dt>
         <dd className={`${styles.data} ${styles.dataBox}`}>
-          <div className={styles.tag}>{gameData?.publisher?.name}</div>
+          <div
+            onClick={() =>
+              router.push({
+                pathname: '/',
+                query: {
+                  publishers: gameData?.publisher?.id,
+                },
+              })
+            }
+            className={styles.tag}>
+            {gameData?.publisher?.name}
+          </div>
         </dd>
         <dt className={styles.label}>Platforms</dt>
         <dd className={`${styles.data} ${styles.dataBox}`}>
           {gameData?.platforms ? (
-            gameData.platforms.map((plt) => (
-              <div className={styles.tag}>{plt.name}</div>
+            gameData.platforms.map((plt, idx) => (
+              <div
+                key={idx}
+                onClick={() =>
+                  router.push({
+                    pathname: '/',
+                    query: {
+                      platforms: plt.id,
+                    },
+                  })
+                }
+                className={styles.tag}>
+                {plt.name}
+              </div>
             ))
           ) : (
             <div>--</div>

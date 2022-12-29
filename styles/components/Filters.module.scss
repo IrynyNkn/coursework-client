@@ -46,6 +46,17 @@
       border-bottom: solid rem(5) black;
       transition: transform 250ms ease-in-out;
     }
+
+    &.withFilter::before {
+      content: '';
+      position: absolute;
+      top: em(-12);
+      right: em(-28);
+      width: rem(10);
+      height: rem(10);
+      border-radius: 50%;
+      background-color: $green-main;
+    }
   }
 
   &.active {
@@ -111,7 +122,7 @@
   flex-wrap: wrap;
 }
 
-.tag {
+.filterTag {
   // TODO extend existing class
   padding: em(5) em(25);
   color: $dark-gray;
@@ -122,9 +133,62 @@
   margin-bottom: em(10);
   transition: color 250ms ease-in-out, border-color 250ms ease-in-out;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 
-  &:hover {
+  &.active {
     color: $green-main;
     border-color: $green-main;
   }
+
+  & .checked {
+    margin-left: em(-15);
+    margin-right: em(4);
+  }
+}
+
+.applyBtn {
+  @include button;
+
+  background-color: $green-main;
+  color: white;
+  padding: em(8) em(12);
+  margin-top: em(16);
+  font-size: em(14);
+  font-weight: 600;
+
+  &:hover {
+    background-color: $green-darker;
+  }
+}
+
+.appliedFiltersBox {
+  padding: 0 em(16);
+
+  & h3 {
+    margin: em(8) 0 em(12);
+    font-weight: 500;
+  }
+
+  & .tagsLabel {
+    margin-bottom: em(10);
+  }
+
+  & .filterTag {
+    background-color: $gray-secondary;
+    font-weight: 400;
+    border: none;
+    padding: em(5) em(10);
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      cursor: unset;
+      color: unset;
+    }
+  }
+}
+
+.resetBtn {
+  font-weight: 500;
 }
