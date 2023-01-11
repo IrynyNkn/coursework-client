@@ -4,7 +4,7 @@ import TableActions from './TableActions';
 import { CellRenderMethodsType } from '../../utils/types/games';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import ReactPaginate from 'react-paginate';
-import { BiSearchAlt } from 'react-icons/bi';
+import SearchBar from './SearchBar';
 
 type TableBodyRowType = {
   [key: string]: string | any[];
@@ -62,14 +62,7 @@ const Table = ({ tableHead, tableBody, cellRenderMethods }: TableType) => {
 
   return (
     <div>
-      <label className={`input-container ${styles.inputLabel}`}>
-        <BiSearchAlt size={20} className={styles.searchIcon} />
-        <input
-          className="input"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </label>
+      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <table className={styles.table}>
         <thead className={styles.tableHead}>
           <tr>

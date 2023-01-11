@@ -6,28 +6,30 @@ import { proxyUrl } from '../../../utils/consts';
 import { toast } from 'react-toastify';
 import { RatingType } from '../../../utils/types/games';
 import getCookies from '../../../utils/getCookies';
+import useGame from '../../../utils/hooks/useGame';
+import useCurrentUser from '../../../utils/hooks/useCurrentUser';
 
 type GameRatingProps = {
-  currentUserId: string | undefined;
   gameId: string | undefined;
   gameRatings: RatingType[];
 };
 
 const GameRating = ({
-  currentUserId,
   gameId,
   gameRatings,
 }: GameRatingProps) => {
   const unRatedArr = [false, false, false, false, false];
   const [ratingScore, setRatingScore] = useState<number | null>(null);
   const [stars, setStars] = useState<boolean[]>(unRatedArr);
+  const {refetch} = useGame(gameId || '');
+  const { data: currentUser } = useCurrentUser();
 
   const currentUserRating = useMemo<RatingType | null>(() => {
     const currentRate = gameRatings.find(
-      (rate) => rate.userId === currentUserId
+      (rate) => rate.userId === currentUser?.id
     );
     return currentRate || null;
-  }, [gameRatings, currentUserId]);
+  }, [gameRatings, currentUser]);
 
   useEffect(() => {
     if (currentUserRating) {
@@ -52,7 +54,7 @@ const GameRating = ({
 
   const makeRateRequest = async (score: number) => {
     const reqBody: any = {
-      userId: currentUserId,
+      userId: currentUser?.id,
       gameId: gameId,
       value: score,
       ratingId: null,
@@ -75,7 +77,8 @@ const GameRating = ({
       const result = await response.json();
 
       if (!result.error) {
-        toast.success(result.message);
+        await refetch();
+        toast.success('Thank you for leaving a comment');
       } else {
         toast.error(result.message);
       }
@@ -86,6 +89,11 @@ const GameRating = ({
   };
 
   const setScore = async (score: number) => {
+    if(!currentUser?.id) {
+      toast.error('You need to authorize first');
+      return;
+    }
+
     setRatingScore(score + 1);
     await makeRateRequest(score + 1);
   };
@@ -94,6 +102,7 @@ const GameRating = ({
     <div className={styles.ratingBox}>
       {stars.map((star, idx) => (
         <span
+          key={idx}
           className={`${styles.iconWrapper} ${
             stars[idx] || (ratingScore && idx < ratingScore)
               ? styles.active

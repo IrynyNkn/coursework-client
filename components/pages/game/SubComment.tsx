@@ -3,12 +3,15 @@ import styles from '/styles/pages/game/Comments.module.scss';
 import UserBadge from '../../common/UserBadge';
 import { BsSuitHeartFill } from 'react-icons/bs';
 import { CommentType } from '../../../utils/types/games';
-import { proxyUrl } from '../../../utils/consts';
+import { proxyUrl, userRoles } from '../../../utils/consts';
 import { toast } from 'react-toastify';
 import { authTokenName } from '../../../utils/auth';
 import useGame from '../../../utils/hooks/useGame';
 import { useRouter } from 'next/router';
 import getCookies from '../../../utils/getCookies';
+import { MdDelete } from 'react-icons/md';
+import useCurrentUser from '../../../utils/hooks/useCurrentUser';
+import { formatDistanceToNow } from 'date-fns'
 
 type SubCommentPropsType = {
   isReply?: boolean;
@@ -25,6 +28,7 @@ const SubComment = ({
 }: SubCommentPropsType) => {
   const router = useRouter();
   const { refetch } = useGame(router.query.id as string);
+  const {data: currentUser} = useCurrentUser();
 
   const commentHasLike = useMemo<boolean>(() => {
     if (!commentData?.commentLikes || !currentUserId) {
@@ -40,6 +44,7 @@ const SubComment = ({
       userId: currentUserId,
       commentId: commentData?.id,
     };
+
     const accessToken = getCookies(authTokenName);
     try {
       const response = await fetch(`${proxyUrl}/comments/likes`, {
@@ -52,9 +57,10 @@ const SubComment = ({
       });
       const result = await response.json();
 
-      if (!result.error) {
-        toast.success(result.message);
-        refetch();
+      if (result.statusCode === 401) {
+        toast.error('You have to be authorized to like comments');
+      } else if (!result.error) {
+        await refetch();
       } else {
         toast.error(result.message);
       }
@@ -81,8 +87,9 @@ const SubComment = ({
         const result = await response.json();
 
         if (!result.error) {
-          toast.success(result.message);
-          refetch();
+          await refetch();
+        } else if (result.statusCode === 401) {
+          toast.error('You have to be authorized to like comments');
         } else {
           toast.error(result.message);
         }
@@ -93,6 +100,33 @@ const SubComment = ({
     }
   };
 
+  const deleteComment = async () => {
+    const accessToken = getCookies(authTokenName);
+    if(commentData?.id && showDeleteCommentBtn) {
+      try {
+        const response = await fetch(`${proxyUrl}/comments/${commentData.id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          method: 'DELETE',
+        });
+        const result = await response.json();
+
+        if (!result.error) {
+          toast.success(result.message);
+          await refetch();
+        } else {
+          toast.error(result.message);
+        }
+      } catch (e) {
+        console.log('Error while leaving a comment', e);
+        toast.error('Something went wrong :(');
+      }
+    } else {
+      toast.error('Access Forbidden');
+    }
+  }
+
   const onLikeClick = async () => {
     if (commentHasLike) {
       await deleteLike();
@@ -100,6 +134,8 @@ const SubComment = ({
       await likeComment();
     }
   };
+
+  const showDeleteCommentBtn = currentUser?.role === userRoles.MANAGER || currentUser?.role === userRoles.ADMIN;
 
   return (
     <div className={styles.flexBox}>
@@ -110,7 +146,9 @@ const SubComment = ({
       <div className={styles.commentBody}>
         <div className={styles.userInfoBox}>
           <p className={styles.userName}>{commentData?.user?.userName}</p>
-          <p className={styles.timeStamp}>3 days ago</p>
+          <p className={styles.timeStamp}>
+            {formatDistanceToNow(commentData?.createdAt ? new Date(commentData.createdAt) : new Date(), {addSuffix: true})}
+          </p>
         </div>
         <p>
           {commentData?.replyUserMention && (
@@ -134,6 +172,14 @@ const SubComment = ({
               {commentData?.commentLikes?.length || ''}
             </p>
           </div>
+          {
+            showDeleteCommentBtn &&
+            <button onClick={deleteComment} className={styles.deleteCommentBtn}>
+              <span className={'delete-action'}>
+                <MdDelete size={20} />
+              </span>
+            </button>
+          }
         </div>
       </div>
     </div>

@@ -33,7 +33,7 @@ const Card = ({ gameData }: CardProps) => {
                     {genre.name}
                   </li>
                 ) : (
-                  <li className={styles.chip}>+{gameData.genres.length - 2}</li>
+                  <li key={idx} className={styles.chip}>+{gameData.genres.length - 2}</li>
                 )
               ) : null
             )}
@@ -49,7 +49,7 @@ const Card = ({ gameData }: CardProps) => {
                     {plt.name}
                   </li>
                 ) : (
-                  <li className={styles.chip}>
+                  <li key={idx} className={styles.chip}>
                     +{gameData.platforms.length - 2}
                   </li>
                 )

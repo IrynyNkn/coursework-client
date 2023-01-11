@@ -22,3 +22,12 @@
   flex: 1;
   margin-bottom: em(60);
 }
+
+.searchContainer {
+  margin-left: em(16);
+  margin-top: em(20);
+
+  & input {
+    margin-bottom: em(10) !important;
+  }
+}

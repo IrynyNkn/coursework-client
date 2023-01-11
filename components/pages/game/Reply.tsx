@@ -9,6 +9,7 @@ import { useLoading } from '../../../utils/hooks/useLoading';
 import useGame from '../../../utils/hooks/useGame';
 import { useRouter } from 'next/router';
 import getCookies from '../../../utils/getCookies';
+import useCurrentUser from '../../../utils/hooks/useCurrentUser';
 
 type ReplyPropsType = {
   isReply?: boolean;
@@ -33,6 +34,7 @@ const Reply = ({
   const [showInput, setShowInput] = useState<boolean>(false);
   const isNested = !!parentReplyOwner;
   const { setLoading } = useLoading();
+  const { data: currentUser } = useCurrentUser();
 
   useEffect(() => {
     if (isReply) {
@@ -64,6 +66,10 @@ const Reply = ({
     accessToken: string | undefined,
     reqBody: CommentPostDto
   ) => {
+    if(reqBody.value.trim().length === 0) {
+      toast.error(`Your comment can't be empty`);
+      return;
+    }
     try {
       const response = await fetch(`${proxyUrl}/comments`, {
         headers: {
@@ -75,12 +81,14 @@ const Reply = ({
       });
       const result = await response.json();
 
-      if (!result.error) {
+      if (result.error) {
+        toast.error(result.message);
+      } else if(result.statusCode === 401) {
+        toast.error('You need to be authorized to leave a comment');
+      } else {
         toast.success(result.message);
         ref.current.textContent = '';
-        refetch();
-      } else {
-        toast.error(result.message);
+        await refetch();
       }
     } catch (e) {
       console.log('Error while leaving a comment', e);
@@ -124,7 +132,7 @@ const Reply = ({
 
   return (
     <div className={styles.replyBox}>
-      <UserBadge size={isReply ? 'small' : 'large'} badgeColor={'#9cadce'} />
+      <UserBadge size={isReply ? 'small' : 'large'} badgeColor={currentUser?.badgeColor ?? '#9cadce'} />
       <div className={styles.commentContainer}>
         {isNested && (
           <span className={styles.parentReplyOwner} ref={parentReplyOwnerRef}>

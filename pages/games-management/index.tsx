@@ -52,16 +52,16 @@ const GamesManagement = () => {
   const cellRenderMethods = {
     renderCell: {
       genres: (genres: GenreType[]) =>
-        genres.map((genre) => (
-          <span className={styles.chip} key={genre.id}>
+        genres.map((genre, idx) => (
+          idx <= 3 ? <span className={styles.chip} key={genre.id}>
             {genre.name}
-          </span>
+          </span> : idx === 4 ? <span className={styles.chip} key={genre.id}>{genres.length - idx}+</span> : null
         )),
       platforms: (platforms: PlatformsType[]) =>
-        platforms.map((plt) => (
-          <span className={styles.chip} key={plt.id}>
+        platforms.map((plt, idx) => (
+          idx <= 3 ? <span className={styles.chip} key={plt.id}>
             {plt.name}
-          </span>
+          </span> : idx === 4 ? <span className={styles.chip} key={plt.id}>{platforms.length - idx}+</span> : null
         )),
     },
     onEditClick: (id: string) =>

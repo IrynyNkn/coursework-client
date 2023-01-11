@@ -99,3 +99,9 @@
 
   margin-right: em(6);
 }
+
+.deleteCommentBtn {
+  @extend .table-action-btn;
+  margin-left: em(6);
+  transform: translateY(em(2));
+}

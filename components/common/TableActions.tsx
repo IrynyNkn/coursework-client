@@ -2,10 +2,6 @@ import React from 'react';
 import styles from '../../styles/components/Table.module.scss';
 import { RiEditFill } from 'react-icons/ri';
 import { MdDelete } from 'react-icons/md';
-import {
-  DeleteButtonFunctionType,
-  EditButtonFunctionType,
-} from '../../utils/types/games';
 
 type TableActionsType = {
   onEditClick: () => void;
@@ -21,7 +17,7 @@ const TableActions = ({ onEditClick, onDeleteClick }: TableActionsType) => {
         </span>
       </button>
       <button onClick={onDeleteClick} className={styles.tableActionsBtn}>
-        <span className={styles.deleteAction}>
+        <span className={'delete-action'}>
           <MdDelete size={20} />
         </span>
       </button>

@@ -23,7 +23,7 @@ const UsersPage = ({ users }: UsersPageType) => {
       id: user.id,
       userName: user.userName,
       email: user.email,
-      roles: user.roles,
+      role: user.role,
     }));
   }, [usersList]);
 
@@ -76,14 +76,18 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
     const accessToken = req.cookies.GamelyAuthToken;
 
-    const resPlatforms = await fetch(`${apiUrl}/users`, {
+    const resUsers = await fetch(`${apiUrl}/users`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    users = await resPlatforms.json();
+    const result = await resUsers.json();
+
+    if(!result.error && result.statusCode !== 500) {
+      users = result;
+    }
   } catch (e) {
-    console.log('Error while fetching genres', e);
+    console.log('Error while fetching users', e);
   }
 
   return {

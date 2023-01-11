@@ -5,7 +5,6 @@ import { GetServerSideProps } from 'next';
 import {
   apiUrl,
   proxyUrl,
-  rolesMapping,
   rolesOptions,
 } from '../../../utils/consts';
 import { UserType } from '../../../utils/types/users';
@@ -14,16 +13,14 @@ import Select from 'react-select';
 import { selectStyles } from '../../../utils';
 import { useLoading } from '../../../utils/hooks/useLoading';
 import { toast } from 'react-toastify';
+import { useQueryClient } from 'react-query';
 
 type EditUserPagePropsType = {
   userData: UserType | null;
 };
 
 type FormSubmitType = {
-  roles: {
-    value: string;
-    label: string;
-  }[];
+  role: string;
 };
 
 const EditUserPage = ({ userData }: EditUserPagePropsType) => {
@@ -32,6 +29,7 @@ const EditUserPage = ({ userData }: EditUserPagePropsType) => {
     push,
   } = useRouter();
   const { setLoading } = useLoading();
+  const queryClient = useQueryClient();
   const {
     control,
     handleSubmit,
@@ -39,20 +37,12 @@ const EditUserPage = ({ userData }: EditUserPagePropsType) => {
   } = useForm<FormSubmitType>({
     defaultValues: userData
       ? {
-          roles: userData.roles.map((role) => ({
-            value: role,
-            label: rolesMapping[role],
-          })),
+          role: userData.role,
         }
       : {},
   });
 
   const onSubmit = async (data: FormSubmitType) => {
-    const roles = data.roles.map((role) => role.value);
-    const reqBody = {
-      roles,
-    };
-
     setLoading(true);
     try {
       const response = await fetch(`${proxyUrl}/users/${id}`, {
@@ -60,12 +50,13 @@ const EditUserPage = ({ userData }: EditUserPagePropsType) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(reqBody),
+        body: JSON.stringify(data),
       });
       const result = await response.json();
 
       if (!result.error) {
         toast.success(result.message);
+        await queryClient.invalidateQueries({queryKey: 'users'})
         await push(`/users`);
       } else {
         toast.error(result.message);
@@ -94,28 +85,27 @@ const EditUserPage = ({ userData }: EditUserPagePropsType) => {
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <div
           className={`${styles.inputWrapper} ${
-            errors?.roles ? styles.error : ''
+            errors?.role ? styles.error : ''
           }`}>
           <p className={styles.inputLabel}>Roles</p>
           <Controller
             control={control}
-            name={'roles'}
+            name={'role'}
             rules={{ required: true }}
             render={({ field: { value, onChange, ref } }) => (
               <Select
                 ref={ref}
                 options={rolesOptions}
-                placeholder={'Roles'}
-                isMulti={true}
-                value={value}
-                onChange={onChange}
-                styles={selectStyles(!!errors?.roles)}
+                placeholder={'Role'}
+                value={rolesOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val?.value)}
+                styles={selectStyles(!!errors?.role)}
               />
             )}
           />
         </div>
         <button type={'submit'} className={'green-button'}>
-          Submit Game
+          Submit Changes
         </button>
       </form>
     </div>

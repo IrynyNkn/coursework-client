@@ -9,13 +9,10 @@ import { getGameById } from '../api/games';
 import useGame from '../../utils/hooks/useGame';
 import { useRouter } from 'next/router';
 import { getCurrentUser } from '../api/users';
-import useCurrentUser from '../../utils/hooks/useCurrentUser';
 
 const GamePage = () => {
   const router = useRouter();
   const { data: gameData } = useGame(router.query.id as string);
-  const { data: currentUser } = useCurrentUser();
-
   return (
     <div className={styles.gameWrapper}>
       <div className={styles.container}>
@@ -26,7 +23,6 @@ const GamePage = () => {
             alt="game-pic"
           />
           <GameRating
-            currentUserId={currentUser?.id}
             gameId={gameData?.id}
             gameRatings={gameData?.ratings || []}
           />

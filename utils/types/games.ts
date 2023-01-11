@@ -72,6 +72,7 @@ export type CommentType = {
     badgeColor: string;
   };
   replyUserMention?: string;
+  createdAt: string;
 };
 
 export type ReplyDataType = {

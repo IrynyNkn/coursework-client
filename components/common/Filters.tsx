@@ -280,29 +280,6 @@ const Filters = () => {
           )}
         </div>
       </section>
-      {/*{*/}
-      {/*  pageFilters.length !== 0 &&*/}
-      {/*  <div className={styles.appliedFiltersBox}>*/}
-      {/*    <h3>Applied Filters</h3>*/}
-      {/*    {*/}
-      {/*      pageFilters.map((pageFlt, idx) => {*/}
-      {/*        if(!pageFlt) return null;*/}
-
-      {/*        return <div key={idx}>*/}
-      {/*          <p className={styles.tagsLabel}>{pageFlt.label}</p>*/}
-      {/*          <ul className={styles.tagContainer}>*/}
-      {/*            {*/}
-      {/*              pageFlt.tags.map((tag, idx) => (*/}
-      {/*                <li key={idx} className={styles.tag}>{tag.name}</li>*/}
-      {/*              ))*/}
-      {/*            }*/}
-      {/*          </ul>*/}
-      {/*        </div>*/}
-      {/*      })*/}
-      {/*    }*/}
-      {/*    <button onClick={resetFilters} className={styles.resetBtn}>Reset Filters</button>*/}
-      {/*  </div>*/}
-      {/*}*/}
     </>
   );
 };

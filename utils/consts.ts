@@ -1,4 +1,5 @@
 import { FilterCategoriesType } from './types/filter';
+import { UserRoles, UserRolesLabel } from './types/users';
 export const apiUrl = 'http://localhost:5050';
 export const proxyUrl = 'http://localhost:3000/api';
 export const baseUrl = 'http://localhost:3000';
@@ -33,13 +34,13 @@ export const rolesOptions = [
   { value: 'admin', label: 'Admin' },
 ];
 
-export const rolesMapping: { [key: string]: string } = {
+export const rolesMapping: { [key in UserRoles]: string } = {
   user: 'User',
   manager: 'Manager',
   admin: 'Admin',
 };
 
-export const userRoles = {
+export const userRoles: {[key in UserRolesLabel]: UserRoles} = {
   MANAGER: 'manager',
   USER: 'user',
   ADMIN: 'admin',

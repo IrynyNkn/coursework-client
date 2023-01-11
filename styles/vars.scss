@@ -78,3 +78,14 @@ $error: #c62828;
   padding: em(2) em(4);
   border-radius: em(4);
 }
+
+.table-action-btn {
+  padding: em(8) em(10);
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 100ms ease-in-out;
+
+  &:hover {
+    background-color: $gray-hover;
+  }
+}

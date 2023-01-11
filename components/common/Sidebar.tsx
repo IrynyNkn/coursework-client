@@ -41,8 +41,8 @@ const Sidebar = ({ sideBarIsOpen, closeSidebar }: SidebarPropsType) => {
           <li className={styles.menuItem} onClick={() => onNavClick('/')}>
             Games
           </li>
-          {(currentUser?.roles?.includes(userRoles.ADMIN) ||
-            currentUser?.roles?.includes(userRoles.MANAGER)) && (
+          {(currentUser?.role === userRoles.ADMIN ||
+            currentUser?.role === userRoles.MANAGER) && (
             <>
               <li
                 className={styles.menuItem}
@@ -66,7 +66,7 @@ const Sidebar = ({ sideBarIsOpen, closeSidebar }: SidebarPropsType) => {
               </li>
             </>
           )}
-          {currentUser?.roles?.includes(userRoles.ADMIN) && (
+          {currentUser?.role === userRoles.ADMIN && (
             <li
               className={styles.menuItem}
               onClick={() => onNavClick('/users')}>

@@ -1,6 +1,6 @@
 import styles from '/styles/pages/home/Home.module.scss';
 import Filters from '../components/common/Filters';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import GamesList from '../components/pages/game/GamesList';
 import ReactPaginate from 'react-paginate';
 import { GetServerSideProps } from 'next';
@@ -8,6 +8,7 @@ import { apiUrl } from '../utils/consts';
 import { GameListType } from '../utils/types/games';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from 'react-query';
+import SearchBar from '../components/common/SearchBar';
 
 type HomePropsType = {
   totalCount: number;
@@ -21,6 +22,9 @@ const Home = ({ totalCount, games, take, skip }: HomePropsType) => {
   const itemsPerPage = 9;
   const endOffset = skip + itemsPerPage;
   const pageCount = Math.ceil(totalCount / itemsPerPage);
+  const parsedSearchQuery = router.query.searchQuery;
+
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const pagginationHandler = async (event: any) => {
     const currentPath = router.pathname;
@@ -34,10 +38,37 @@ const Home = ({ totalCount, games, take, skip }: HomePropsType) => {
     });
   };
 
+  const clickSearchBtn = async () => {
+    const path = router.asPath;
+    const indexOfSearchQuery = path.indexOf('searchQuery');
+    let searchQueryParam = '';
+
+    if(indexOfSearchQuery < 0) {
+      searchQueryParam = `${path}${path.length > 1 ? '&' : '?'}searchQuery=${searchQuery}`;
+    } else {
+      const croppedPath = path.slice(0, indexOfSearchQuery - 1);
+      searchQueryParam = `${croppedPath}${croppedPath.length > 1 ? '&' : '?'}searchQuery=${searchQuery}`;
+    }
+
+    await router.push(searchQueryParam)
+  };
+
+  useEffect(() => {
+    setSearchQuery((parsedSearchQuery || '') as string);
+  }, [parsedSearchQuery]);
+
   return (
     <>
       <Filters />
       <div className={styles.content}>
+        <div className={styles.searchContainer}>
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            mainScreen={true}
+            clickSearchBtn={clickSearchBtn}
+          />
+        </div>
         <div className={styles.container}>
           <GamesList games={games} />
           <ReactPaginate
@@ -71,13 +102,14 @@ export const getServerSideProps: GetServerSideProps = async ({
   const genres = query.genres ?? '';
   const publishers = query.publishers ?? '';
   const platforms = query.platforms ?? '';
+  const searchQuery = query.searchQuery ?? '';
   const accessToken = req.cookies.GamelyAuthToken;
   let games = [];
   let totalCount = 0;
 
   const filtersQuery = `${genres ? '&genres=' + genres : ''}${
     platforms ? '&platforms=' + platforms : ''
-  }${publishers ? '&publishers=' + publishers : ''}`;
+  }${publishers ? '&publishers=' + publishers : ''}${searchQuery ? ('&searchQuery=' + searchQuery) : ''}`;
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery('platforms', () =>
