@@ -21,6 +21,7 @@ import { selectStyles } from '../../utils';
 import { useRouter } from 'next/router';
 import getCookies from '../../utils/getCookies';
 import { authTokenName } from '../../utils/auth';
+import { log } from 'util';
 
 type AddGameProps = {
   platforms: PlatformsType[] | null;
@@ -65,6 +66,8 @@ const Add = ({ platforms, genres, publishers, gameData }: AddGameProps) => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     control,
     formState: { errors },
   } = useForm<GameFormType>({
@@ -75,6 +78,7 @@ const Add = ({ platforms, genres, publishers, gameData }: AddGameProps) => {
           publisherId: gameData.publisher.id,
           ageRestriction: gameData.ageRestriction.toString(),
           releaseYear: gameData.releaseYear.toString(),
+          gameImage: 'filled',
           platforms: gameData.platforms.map((plt) => ({
             // @ts-ignore
             value: plt.platform.id,
@@ -96,8 +100,8 @@ const Add = ({ platforms, genres, publishers, gameData }: AddGameProps) => {
       setPreview(gameData?.imageLink || undefined);
       return;
     }
-
     const objectUrl = URL.createObjectURL(selectedImage);
+    setValue('gameImage', 'filled', {shouldValidate: true});
     setPreview(objectUrl);
 
     return () => URL.revokeObjectURL(objectUrl);
@@ -111,6 +115,10 @@ const Add = ({ platforms, genres, publishers, gameData }: AddGameProps) => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     multiple: false,
+    accept: {
+      'image/jpeg': [],
+      'image/png': []
+    }
   });
 
   const onSubmit = async (data: GameFormType) => {
@@ -303,13 +311,17 @@ const Add = ({ platforms, genres, publishers, gameData }: AddGameProps) => {
             )}
           />
         </div>
-        <div className={styles.inputWrapper}>
+        <div className={`${styles.inputWrapper} ${
+          errors?.gameImage ? styles.error : ''
+        }`}>
           <p className={styles.inputLabel}>Game Image</p>
           <div {...getRootProps({ className: 'drop-zone' })}>
             <input
               type="file"
               accept=".jpeg,.jpg,.png"
-              name="gameImage"
+              {...register('gameImage', {
+                required: true,
+              })}
               {...getInputProps()}
             />
             {preview ? (
@@ -329,7 +341,6 @@ const Add = ({ platforms, genres, publishers, gameData }: AddGameProps) => {
             <input
               type="file"
               accept=".jpeg,.jpg,.png"
-              name="gameImage"
               onChange={uploadImage}
             />
             {selectedImage ? (
@@ -344,6 +355,9 @@ const Add = ({ platforms, genres, publishers, gameData }: AddGameProps) => {
               </>
             )}
           </label>
+          {
+            errors?.gameImage && <p className={styles.errorMsg}>Game image can't be empty</p>
+          }
         </div>
         <label
           className={`${styles.inputWrapper} ${

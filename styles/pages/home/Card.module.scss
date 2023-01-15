@@ -3,6 +3,7 @@
 .card {
   background-color: $white;
   position: relative;
+  width: 100%;
 
   &::after {
     content: '';

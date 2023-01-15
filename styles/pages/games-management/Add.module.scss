@@ -42,6 +42,12 @@
   }
 }
 
+.errorMsg {
+  color: $error;
+  font-size: em(12);
+  margin-top: em(2);
+}
+
 .input {
   width: 100%;
 

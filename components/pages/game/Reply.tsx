@@ -35,12 +35,19 @@ const Reply = ({
   const isNested = !!parentReplyOwner;
   const { setLoading } = useLoading();
   const { data: currentUser } = useCurrentUser();
+  const [innerHeight, setInnerHeight] = useState<number>(0);
 
   useEffect(() => {
     if (isReply) {
       ref?.current?.focus();
     }
   }, []);
+
+  // useEffect(() => {
+  //   if(window) {
+  //     setInnerHeight(window.innerHeight);
+  //   }
+  // }, [window]);
 
   useEffect(() => {
     setShowInput(true);
@@ -93,7 +100,18 @@ const Reply = ({
     } catch (e) {
       console.log('Error while leaving a comment', e);
       toast.error('Something went wrong :(');
+    } finally {
+      if(close) {
+        close();
+      }
     }
+  };
+
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: window.innerHeight + 400,
+      behavior: 'smooth'
+    });
   };
 
   const submit = async () => {
@@ -109,6 +127,7 @@ const Reply = ({
         parentId: null,
       };
       await leaveComment(commentValue, accessToken, reqBody as CommentPostDto);
+      setTimeout(() => scrollToBottom(), 0);
     } else if (isReply && !parentReplyOwner) {
       const reqBody = {
         userId,
@@ -127,6 +146,7 @@ const Reply = ({
       };
       await leaveComment(commentValue, accessToken, reqBody as CommentPostDto);
     }
+    setShowButtons(false);
     setLoading(false);
   };
 
