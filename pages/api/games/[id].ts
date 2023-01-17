@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { apiUrl } from '../../../utils/consts';
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,7 +8,7 @@ export default async function handler(
     const gameId = req.query.id;
     const accessToken = req.cookies.GamelyAuthToken;
     try {
-      const response = await fetch(`${apiUrl}/games/${gameId}`, {
+      const response = await fetch(`${process.env.API_URL}/games/${gameId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${accessToken}`,

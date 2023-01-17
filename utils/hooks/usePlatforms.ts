@@ -1,10 +1,9 @@
 import { useQuery } from 'react-query';
 import { PlatformsType } from '../types/games';
-import { proxyUrl } from '../consts';
 
 const usePlatforms = () => {
   const platformsQuery = useQuery<PlatformsType[]>('platforms', () =>
-    fetch(`${proxyUrl}/platforms`).then((res) => res.json())
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/platforms`).then((res) => res.json())
   );
 
   return {

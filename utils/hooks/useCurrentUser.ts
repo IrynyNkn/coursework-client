@@ -1,7 +1,6 @@
 import { QueriesOptions, useQuery } from 'react-query';
 import { authTokenName } from '../auth';
 import getCookies from '../getCookies';
-import { apiUrl } from '../consts';
 import { useRouter } from 'next/router';
 import { UserType } from '../types/users';
 
@@ -11,7 +10,7 @@ const useCurrentUser = (options:QueriesOptions<any>  = {}) => {
   const userQuery = useQuery<UserType>(
     ['me'],
     () =>
-      fetch(`${apiUrl}/users/me`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
         headers: {
           Authorization: `Bearer ${getCookies(authTokenName)}`,
         },

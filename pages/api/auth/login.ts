@@ -1,12 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { apiUrl } from '../../../utils/consts';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    const response = await fetch(`${apiUrl}/auth/signin`, {
+    const response = await fetch(`${process.env.API_URL}/auth/signin`, {
       headers: {
         'Content-Type': 'application/json',
       },

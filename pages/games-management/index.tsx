@@ -3,10 +3,8 @@ import styles from '/styles/pages/games-management/GamesManagement.module.scss';
 import { useRouter } from 'next/router';
 import Table from '../../components/common/Table';
 import { GetServerSideProps } from 'next';
-import { apiUrl, proxyUrl } from '../../utils/consts';
 import {
   CellRenderMethodsType,
-  GameListType,
   GenreType,
   PlatformsType,
 } from '../../utils/types/games';
@@ -33,7 +31,7 @@ const GamesManagement = () => {
 
   const deleteGame = async (id: string) => {
     try {
-      const response = await fetch(`${proxyUrl}/games/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/games/${id}`, {
         method: 'DELETE',
       });
       const result = await response.json();
@@ -94,7 +92,7 @@ const GamesManagement = () => {
 export const getServerSideProps: GetServerSideProps = async () => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery('games', () =>
-    fetch(`${apiUrl}/games`).then((res) => res.json())
+    fetch(`${process.env.API_URL || process.env.NEXT_PUBLIC_API_URL}/games`).then((res) => res.json())
   );
 
   return {

@@ -1,10 +1,9 @@
 import { useQuery } from 'react-query';
 import { GenreType } from '../types/games';
-import { proxyUrl } from '../consts';
 
 const useGenres = () => {
   const genresQuery = useQuery<GenreType[]>('genres', () =>
-    fetch(`${proxyUrl}/genres`).then((res) => res.json())
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/genres`).then((res) => res.json())
   );
 
   return {

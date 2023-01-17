@@ -1,23 +1,6 @@
-import { FilterCategoriesType } from './types/filter';
 import { UserRoles, UserRolesLabel } from './types/users';
 export const apiUrl = 'http://localhost:5050';
 export const proxyUrl = 'http://localhost:3000/api';
-export const baseUrl = 'http://localhost:3000';
-
-export const filterCategories: FilterCategoriesType[] = [
-  {
-    label: 'Genre',
-    tags: [
-      { id: '', name: 'Action' },
-      { id: '', name: 'Shooter' },
-      { id: '', name: 'Strategy' },
-    ],
-  },
-  // {
-  //   label: 'Page Modes',
-  //   tags: ['Free', 'Multiplayer', 'Singleplayer'],
-  // },
-];
 
 export const ageRestrictions = [
   { value: '0', label: '--' },

@@ -3,7 +3,7 @@ import styles from '/styles/pages/game/Comments.module.scss';
 import UserBadge from '../../common/UserBadge';
 import { BsSuitHeartFill } from 'react-icons/bs';
 import { CommentType } from '../../../utils/types/games';
-import { proxyUrl, userRoles } from '../../../utils/consts';
+import { userRoles } from '../../../utils/consts';
 import { toast } from 'react-toastify';
 import { authTokenName } from '../../../utils/auth';
 import useGame from '../../../utils/hooks/useGame';
@@ -47,7 +47,7 @@ const SubComment = ({
 
     const accessToken = getCookies(authTokenName);
     try {
-      const response = await fetch(`${proxyUrl}/comments/likes`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/comments/likes`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -77,7 +77,7 @@ const SubComment = ({
     const accessToken = getCookies(authTokenName);
     if (likeId) {
       try {
-        const response = await fetch(`${proxyUrl}/comments/likes/${likeId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/comments/likes/${likeId}`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -104,7 +104,7 @@ const SubComment = ({
     const accessToken = getCookies(authTokenName);
     if(commentData?.id && showDeleteCommentBtn) {
       try {
-        const response = await fetch(`${proxyUrl}/comments/${commentData.id}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/comments/${commentData.id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

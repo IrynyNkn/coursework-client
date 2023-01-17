@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from '/styles/pages/games-management/Add.module.scss';
 import Select from 'react-select';
 import { useForm, Controller } from 'react-hook-form';
-import { ageRestrictions, apiUrl } from '../../utils/consts';
+import { ageRestrictions } from '../../utils/consts';
 import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 import { TbFileUpload } from 'react-icons/tb';
 import {
@@ -21,7 +21,6 @@ import { selectStyles } from '../../utils';
 import { useRouter } from 'next/router';
 import getCookies from '../../utils/getCookies';
 import { authTokenName } from '../../utils/auth';
-import { log } from 'util';
 
 type AddGameProps = {
   platforms: PlatformsType[] | null;
@@ -67,7 +66,6 @@ const Add = ({ platforms, genres, publishers, gameData }: AddGameProps) => {
     register,
     handleSubmit,
     setValue,
-    watch,
     control,
     formState: { errors },
   } = useForm<GameFormType>({
@@ -148,7 +146,7 @@ const Add = ({ platforms, genres, publishers, gameData }: AddGameProps) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${apiUrl}/games${reqMethod === 'PATCH' ? '/' + gameId : ''}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/games${reqMethod === 'PATCH' ? '/' + gameId : ''}`,
         {
           method: reqMethod,
           body: formData,
@@ -405,23 +403,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const accessToken = context.req.cookies.GamelyAuthToken;
     const gameId = context.query.gameId;
-    const resPlatforms = await fetch(`${apiUrl}/platforms`, {
+    const resPlatforms = await fetch(`${process.env.API_URL}/platforms`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    const resPublishers = await fetch(`${apiUrl}/publishers`, {
+    const resPublishers = await fetch(`${process.env.API_URL}/publishers`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    const resGenres = await fetch(`${apiUrl}/genres`, {
+    const resGenres = await fetch(`${process.env.API_URL}/genres`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
     if (gameId) {
-      const resGameData = await fetch(`${apiUrl}/games/${gameId}`, {
+      const resGameData = await fetch(`${process.env.API_URL}/games/${gameId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

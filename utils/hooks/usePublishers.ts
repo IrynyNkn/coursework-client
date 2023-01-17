@@ -1,10 +1,9 @@
 import { useQuery } from 'react-query';
 import { PublisherType } from '../types/games';
-import { proxyUrl } from '../consts';
 
 const usePublishers = () => {
   const publishersQuery = useQuery<PublisherType[]>('publishers', () =>
-    fetch(`${proxyUrl}/publishers`).then((res) => res.json())
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/publishers`).then((res) => res.json())
   );
 
   return {

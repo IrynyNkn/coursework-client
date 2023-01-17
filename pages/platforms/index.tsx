@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styles from '/styles/pages/games-management/GamesManagement.module.scss';
 import { GetServerSideProps } from 'next';
-import { apiUrl, proxyUrl } from '../../utils/consts';
 import { useRouter } from 'next/router';
 import {
   GenreType,
@@ -22,7 +21,7 @@ const Platforms = ({ platforms }: PlatformsType) => {
 
   const deletePlatform = async (id: string) => {
     try {
-      const response = await fetch(`${proxyUrl}/platforms/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/platforms/${id}`, {
         method: 'DELETE',
       });
       const result = await response.json();
@@ -82,7 +81,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
     const accessToken = req.cookies.GamelyAuthToken;
 
-    const resPlatforms = await fetch(`${apiUrl}/platforms`, {
+    const resPlatforms = await fetch(`${process.env.API_URL}/platforms`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

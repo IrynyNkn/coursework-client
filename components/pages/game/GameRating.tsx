@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styles from '/styles/pages/game/GameRating.module.scss';
 import { AiFillStar } from 'react-icons/ai';
 import { authTokenName } from '../../../utils/auth';
-import { proxyUrl } from '../../../utils/consts';
 import { toast } from 'react-toastify';
 import { RatingType } from '../../../utils/types/games';
 import getCookies from '../../../utils/getCookies';
@@ -66,7 +65,7 @@ const GameRating = ({
 
     const accessToken = getCookies(authTokenName);
     try {
-      const response = await fetch(`${proxyUrl}/games/rate`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/games/rate`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,

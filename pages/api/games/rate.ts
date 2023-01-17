@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { apiUrl } from '../../../utils/consts';
 
 export default async function handler(
   req: NextApiRequest,
@@ -7,7 +6,7 @@ export default async function handler(
 ) {
   try {
     if (req.method === 'POST') {
-      const response = await fetch(`${apiUrl}/ratings`, {
+      const response = await fetch(`${process.env.API_URL}/ratings`, {
         headers: {
           'Content-Type': 'application/json',
         },

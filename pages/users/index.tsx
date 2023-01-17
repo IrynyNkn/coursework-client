@@ -3,7 +3,6 @@ import styles from '/styles/pages/games-management/GamesManagement.module.scss';
 import Table from '../../components/common/Table';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import { apiUrl, proxyUrl } from '../../utils/consts';
 import { UserType } from '../../utils/types/users';
 import { CellRenderMethodsType } from '../../utils/types/games';
 import { toast } from 'react-toastify';
@@ -29,7 +28,7 @@ const UsersPage = ({ users }: UsersPageType) => {
 
   const deleteUser = async (id: string) => {
     try {
-      const response = await fetch(`${proxyUrl}/users/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${id}`, {
         method: 'DELETE',
       });
       const result = await response.json();
@@ -76,7 +75,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
     const accessToken = req.cookies.GamelyAuthToken;
 
-    const resUsers = await fetch(`${apiUrl}/users`, {
+    const resUsers = await fetch(`${process.env.API_URL}/users`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

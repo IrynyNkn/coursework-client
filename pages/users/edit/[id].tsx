@@ -3,8 +3,6 @@ import styles from '/styles/pages/games-management/Add.module.scss';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import {
-  apiUrl,
-  proxyUrl,
   rolesOptions,
 } from '../../../utils/consts';
 import { UserType } from '../../../utils/types/users';
@@ -45,7 +43,7 @@ const EditUserPage = ({ userData }: EditUserPagePropsType) => {
   const onSubmit = async (data: FormSubmitType) => {
     setLoading(true);
     try {
-      const response = await fetch(`${proxyUrl}/users/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -114,14 +112,13 @@ const EditUserPage = ({ userData }: EditUserPagePropsType) => {
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
-  res,
   query,
 }) => {
   const userId = query.id;
   const accessToken = req.cookies.GamelyAuthToken;
   let userData = null;
 
-  const response = await fetch(`${apiUrl}/users/${userId}`, {
+  const response = await fetch(`${process.env.API_URL}/users/${userId}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

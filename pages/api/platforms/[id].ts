@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { apiUrl } from '../../../utils/consts';
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,7 +8,7 @@ export default async function handler(
   const gameId = req.query.id;
   try {
     if (req.method === 'DELETE') {
-      const response = await fetch(`${apiUrl}/platforms/${gameId}`, {
+      const response = await fetch(`${process.env.API_URL}/platforms/${gameId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -29,7 +28,7 @@ export default async function handler(
           .json({ error: result.error, message: errorMessage });
       }
     } else {
-      const response = await fetch(`${apiUrl}/platforms/${gameId}`, {
+      const response = await fetch(`${process.env.API_URL}/platforms/${gameId}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,

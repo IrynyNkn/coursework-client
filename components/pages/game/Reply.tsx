@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from '/styles/pages/game/Reply.module.scss';
 import UserBadge from '../../common/UserBadge';
-import { proxyUrl } from '../../../utils/consts';
 import { authTokenName } from '../../../utils/auth';
 import { toast } from 'react-toastify';
 import { CommentPostDto, ReplyDataType } from '../../../utils/types/games';
@@ -35,19 +34,12 @@ const Reply = ({
   const isNested = !!parentReplyOwner;
   const { setLoading } = useLoading();
   const { data: currentUser } = useCurrentUser();
-  const [innerHeight, setInnerHeight] = useState<number>(0);
 
   useEffect(() => {
     if (isReply) {
       ref?.current?.focus();
     }
   }, []);
-
-  // useEffect(() => {
-  //   if(window) {
-  //     setInnerHeight(window.innerHeight);
-  //   }
-  // }, [window]);
 
   useEffect(() => {
     setShowInput(true);
@@ -78,7 +70,7 @@ const Reply = ({
       return;
     }
     try {
-      const response = await fetch(`${proxyUrl}/comments`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/comments`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,

@@ -6,7 +6,6 @@ import { SignUpDto, SignUpType } from '../utils/types/auth';
 import { emailRegExp } from '../utils/regExp';
 import { useLoading } from '../utils/hooks/useLoading';
 import { toast } from 'react-toastify';
-import { proxyUrl } from '../utils/consts';
 import { useRouter } from 'next/router';
 import { saveTokenToCookies } from '../utils/auth';
 
@@ -24,7 +23,7 @@ const Register = () => {
     console.log('DATA', data);
     setLoading(true);
     try {
-      const response = await fetch(`${proxyUrl}/auth/signup`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/signup`, {
         headers: {
           'Content-Type': 'application/json',
         },

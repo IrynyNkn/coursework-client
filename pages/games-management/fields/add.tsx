@@ -5,7 +5,6 @@ import { useLoading } from '../../../utils/hooks/useLoading';
 import { useForm } from 'react-hook-form';
 import { GameFieldsFormType } from '../../../utils/types/games';
 import { toast } from 'react-toastify';
-import { apiUrl, proxyUrl } from '../../../utils/consts';
 import { GetServerSideProps } from 'next';
 
 type AddFieldType = {
@@ -52,7 +51,7 @@ const AddField = ({ fieldData }: AddFieldType) => {
     const reqMethod = fieldId && fieldData ? 'PATCH' : 'POST';
     try {
       const response = await fetch(
-        `${proxyUrl}/${fieldType}${reqMethod === 'PATCH' ? '/' + fieldId : ''}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/${fieldType}${reqMethod === 'PATCH' ? '/' + fieldId : ''}`,
         {
           method: reqMethod,
           headers: {
@@ -109,7 +108,6 @@ const AddField = ({ fieldData }: AddFieldType) => {
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
-  res,
   query,
 }) => {
   let fieldData = null;
@@ -118,7 +116,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   const accessToken = req.cookies.GamelyAuthToken;
 
   if (fieldId) {
-    const resGenres = await fetch(`${apiUrl}/${fieldType}/${fieldId}`, {
+    const resGenres = await fetch(`${process.env.API_URL}/${fieldType}/${fieldId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

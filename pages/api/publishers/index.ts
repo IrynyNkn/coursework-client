@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { apiUrl } from '../../../utils/consts';
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,7 +7,7 @@ export default async function handler(
   const accessToken = req.cookies.GamelyAuthToken;
   try {
     if (req.method === 'POST') {
-      const response = await fetch(`${apiUrl}/publishers`, {
+      const response = await fetch(`${process.env.API_URL}/publishers`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -30,7 +29,7 @@ export default async function handler(
           .json({ error: result.error, message: errorMessage });
       }
     } else {
-      const response = await fetch(`${apiUrl}/publishers`, {
+      const response = await fetch(`${process.env.API_URL}/publishers`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

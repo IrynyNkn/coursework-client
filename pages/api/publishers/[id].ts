@@ -1,15 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { apiUrl } from '../../../utils/consts';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const accessToken = req.cookies.GamelyAuthToken;
-  const gameId = req.query.id;
+  const pubId = req.query.id;
   try {
     if (req.method === 'DELETE') {
-      const response = await fetch(`${apiUrl}/publishers/${gameId}`, {
+      const response = await fetch(`${process.env.API_URL}/publishers/${pubId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -29,7 +28,7 @@ export default async function handler(
           .json({ error: result.error, message: errorMessage });
       }
     } else {
-      const response = await fetch(`${apiUrl}/publishers/${gameId}`, {
+      const response = await fetch(`${process.env.API_URL}/publishers/${pubId}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,

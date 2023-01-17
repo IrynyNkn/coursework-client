@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { LoginDto } from '../utils/types/auth';
 import { useLoading } from '../utils/hooks/useLoading';
 import { emailRegExp } from '../utils/regExp';
-import { proxyUrl } from '../utils/consts';
 import { saveTokenToCookies } from '../utils/auth';
 import { toast } from 'react-toastify';
 
@@ -22,7 +21,7 @@ const Login = () => {
   const onSubmit = async (data: LoginDto) => {
     setLoading(true);
     try {
-      const response = await fetch(`${proxyUrl}/auth/login`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`, {
         headers: {
           'Content-Type': 'application/json',
         },

@@ -1,11 +1,10 @@
 import { useQuery } from 'react-query';
 import { GameDataType } from '../types/games';
-import { proxyUrl } from '../consts';
 
 const useGames = () => {
   const gamesQuery = useQuery<GameDataType[]>(
     'games',
-    () => fetch(`${proxyUrl}/games`).then((res) => res.json()),
+    () => fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/games`).then((res) => res.json()),
     {
       // @ts-ignore
       select: (result) => result.data,

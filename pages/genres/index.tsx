@@ -2,12 +2,8 @@ import React, { useState } from 'react';
 import styles from '/styles/pages/games-management/GamesManagement.module.scss';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import { dehydrate, QueryClient } from 'react-query';
-import { apiUrl, proxyUrl } from '../../utils/consts';
 import {
-  CellRenderMethodsType,
   GenreType,
-  PlatformsType,
 } from '../../utils/types/games';
 import Table from '../../components/common/Table';
 import { toast } from 'react-toastify';
@@ -24,7 +20,7 @@ const Genres = ({ genres }: GenresType) => {
 
   const deleteGenre = async (id: string) => {
     try {
-      const response = await fetch(`${proxyUrl}/genres/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/genres/${id}`, {
         method: 'DELETE',
       });
       const result = await response.json();
@@ -84,7 +80,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
     const accessToken = req.cookies.GamelyAuthToken;
 
-    const resGenres = await fetch(`${apiUrl}/genres`, {
+    const resGenres = await fetch(`${process.env.API_URL}/genres`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

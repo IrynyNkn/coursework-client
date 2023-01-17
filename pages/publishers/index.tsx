@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styles from '/styles/pages/games-management/GamesManagement.module.scss';
 import { GetServerSideProps } from 'next';
-import { apiUrl, proxyUrl } from '../../utils/consts';
 import { PublisherType } from '../../utils/types/games';
 import { useRouter } from 'next/router';
 import Table from '../../components/common/Table';
@@ -20,7 +19,7 @@ const Publishers = ({ publishers }: PublishersType) => {
 
   const deletePublisher = async (id: string) => {
     try {
-      const response = await fetch(`${proxyUrl}/publishers/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/publishers/${id}`, {
         method: 'DELETE',
       });
       const result = await response.json();
@@ -83,7 +82,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
     const accessToken = req.cookies.GamelyAuthToken;
 
-    const resPublishers = await fetch(`${apiUrl}/publishers`, {
+    const resPublishers = await fetch(`${process.env.API_URL}/publishers`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

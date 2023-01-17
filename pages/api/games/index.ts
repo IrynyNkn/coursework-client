@@ -1,4 +1,3 @@
-import { apiUrl } from '../../../utils/consts';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export const getGameById = async (
@@ -8,7 +7,7 @@ export const getGameById = async (
   let game = null;
 
   try {
-    const res = await fetch(`${apiUrl}/games/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/games/${id}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -32,7 +31,7 @@ export default async function handler(
   const accessToken = req.cookies.GamelyAuthToken;
 
   try {
-    const response = await fetch(`${apiUrl}/games`, {
+    const response = await fetch(`${process.env.API_URL}/games`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

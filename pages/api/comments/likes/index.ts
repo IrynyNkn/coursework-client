@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { apiUrl } from '../../../../utils/consts';
 
 export default async function handler(
   req: NextApiRequest,
@@ -7,7 +6,7 @@ export default async function handler(
 ) {
   const accessToken = req.cookies.GamelyAuthToken;
   try {
-    const response = await fetch(`${apiUrl}/comment-likes`, {
+    const response = await fetch(`${process.env.API_URL}/comment-likes`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,

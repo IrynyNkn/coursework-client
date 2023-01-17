@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import GamesList from '../components/pages/game/GamesList';
 import ReactPaginate from 'react-paginate';
 import { GetServerSideProps } from 'next';
-import { apiUrl } from '../utils/consts';
 import { GameListType } from '../utils/types/games';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from 'react-query';
@@ -17,7 +16,7 @@ type HomePropsType = {
   skip: number;
 };
 
-const Home = ({ totalCount, games, take, skip }: HomePropsType) => {
+const Home = ({ totalCount, games, skip }: HomePropsType) => {
   const router = useRouter();
   const itemsPerPage = 9;
   const endOffset = skip + itemsPerPage;
@@ -113,18 +112,17 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery('platforms', () =>
-    fetch(`${apiUrl}/platforms`).then((res) => res.json())
+    fetch(`${process.env.API_URL || process.env.NEXT_PUBLIC_API_URL}/platforms`).then((res) => res.json())
   );
   await queryClient.prefetchQuery('genres', () =>
-    fetch(`${apiUrl}/genres`).then((res) => res.json())
+    fetch(`${process.env.API_URL || process.env.NEXT_PUBLIC_API_URL}/genres`).then((res) => res.json())
   );
   await queryClient.prefetchQuery('publishers', () =>
-    fetch(`${apiUrl}/publishers`).then((res) => res.json())
+    fetch(`${process.env.API_URL || process.env.NEXT_PUBLIC_API_URL}/publishers`).then((res) => res.json())
   );
-
   try {
     const res = await fetch(
-      `${apiUrl}/games?take=${take}&skip=${skip}${filtersQuery}`,
+      `${process.env.API_URL}/games?take=${take}&skip=${skip}${filtersQuery}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { apiUrl } from '../../../../utils/consts';
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,7 +8,7 @@ export default async function handler(
   const id = req.query.id;
 
   try {
-    const response = await fetch(`${apiUrl}/comment-likes/${id}`, {
+    const response = await fetch(`${process.env.API_URL}/comment-likes/${id}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
