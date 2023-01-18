@@ -77,7 +77,7 @@ const GameRating = ({
 
       if (!result.error) {
         await refetch();
-        toast.success('Thank you for leaving a comment');
+        toast.success('You successfully rated game');
       } else {
         toast.error(result.message);
       }
