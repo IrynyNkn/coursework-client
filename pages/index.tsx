@@ -69,21 +69,30 @@ const Home = ({ totalCount, games, skip }: HomePropsType) => {
           />
         </div>
         <div className={styles.container}>
-          <GamesList games={games} />
-          <ReactPaginate
-            containerClassName={'pagination'}
-            activeClassName={'active'}
-            breakLabel="..."
-            onPageChange={pagginationHandler}
-            pageRangeDisplayed={5}
-            pageCount={pageCount}
-            renderOnZeroPageCount={() => null}
-            pageClassName={'pagination-page'}
-            nextClassName={`next ${endOffset >= totalCount ? 'hidden' : ''}`}
-            nextLabel={'Next'}
-            previousClassName={`previous ${skip <= 0 ? 'hidden' : ''}`}
-            previousLabel={'Previous'}
-          />
+          {
+            games.length === 0 ?
+              <div className={styles.emptyWrapper}>
+                <p className={styles.emptyText}>There is no games that match your request :(</p>
+              </div>
+              :
+              <>
+                <GamesList games={games} />
+                <ReactPaginate
+                  containerClassName={'pagination'}
+                  activeClassName={'active'}
+                  breakLabel="..."
+                  onPageChange={pagginationHandler}
+                  pageRangeDisplayed={5}
+                  pageCount={pageCount}
+                  renderOnZeroPageCount={() => null}
+                  pageClassName={'pagination-page'}
+                  nextClassName={`next ${endOffset >= totalCount ? 'hidden' : ''}`}
+                  nextLabel={'Next'}
+                  previousClassName={`previous ${skip <= 0 ? 'hidden' : ''}`}
+                  previousLabel={'Previous'}
+                />
+              </>
+          }
         </div>
       </div>
     </>

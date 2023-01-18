@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from '/styles/pages/game/Comments.module.scss';
 import UserBadge from '../../common/UserBadge';
 import { BsSuitHeartFill } from 'react-icons/bs';
@@ -12,6 +12,9 @@ import getCookies from '../../../utils/getCookies';
 import { MdDelete } from 'react-icons/md';
 import useCurrentUser from '../../../utils/hooks/useCurrentUser';
 import { formatDistanceToNow } from 'date-fns'
+import AlertModal from '../../common/AlertModal';
+import { DeleteModalType } from '../../../utils/types/common';
+import { useLoading } from '../../../utils/hooks/useLoading';
 
 type SubCommentPropsType = {
   isReply?: boolean;
@@ -27,8 +30,13 @@ const SubComment = ({
   currentUserId,
 }: SubCommentPropsType) => {
   const router = useRouter();
+  const {setLoading} = useLoading();
   const { refetch } = useGame(router.query.id as string);
   const {data: currentUser} = useCurrentUser();
+  const [deleteCommentModalOpen, setDeleteCommentModalOpen] = useState<DeleteModalType>({
+    id: '',
+    isOpen: false
+  });
 
   const commentHasLike = useMemo<boolean>(() => {
     if (!commentData?.commentLikes || !currentUserId) {
@@ -103,6 +111,7 @@ const SubComment = ({
   const deleteComment = async () => {
     const accessToken = getCookies(authTokenName);
     if(commentData?.id && showDeleteCommentBtn) {
+      setLoading(true);
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/comments/${commentData.id}`, {
           headers: {
@@ -121,6 +130,8 @@ const SubComment = ({
       } catch (e) {
         console.log('Error while leaving a comment', e);
         toast.error('Something went wrong :(');
+      } finally {
+        setLoading(false);
       }
     } else {
       toast.error('Access Forbidden');
@@ -174,7 +185,12 @@ const SubComment = ({
           </div>
           {
             showDeleteCommentBtn &&
-            <button onClick={deleteComment} className={styles.deleteCommentBtn}>
+            <button
+              onClick={() => setDeleteCommentModalOpen({
+                id: '',
+                isOpen: true
+              })}
+              className={styles.deleteCommentBtn}>
               <span className={'delete-action'}>
                 <MdDelete size={20} />
               </span>
@@ -182,6 +198,14 @@ const SubComment = ({
           }
         </div>
       </div>
+      <AlertModal
+        modalIsOpen={deleteCommentModalOpen}
+        closeModal={() => setDeleteCommentModalOpen({
+          id: '',
+          isOpen: false
+        })}
+        deleteItem={deleteComment}
+      />
     </div>
   );
 };

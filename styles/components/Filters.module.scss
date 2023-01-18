@@ -1,18 +1,20 @@
 @import 'styles/vars';
 
 .container {
-  height: rem(69);
+  min-height: rem(69);
   width: 100%;
   color: $dark-gray;
   display: flex;
   border-bottom: $gray-border;
   background-color: $light-bg;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .label {
   display: flex;
   align-items: center;
-  height: 100%;
+  height: rem(69);
   padding: 0 em(15) 0;
   border-right: $gray-border;
 

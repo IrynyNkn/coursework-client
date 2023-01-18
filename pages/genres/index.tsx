@@ -7,6 +7,9 @@ import {
 } from '../../utils/types/games';
 import Table from '../../components/common/Table';
 import { toast } from 'react-toastify';
+import { useLoading } from '../../utils/hooks/useLoading';
+import { DeleteModalType } from '../../utils/types/common';
+import AlertModal from '../../components/common/AlertModal';
 
 type GenresType = {
   genres: GenreType[];
@@ -15,10 +18,16 @@ type GenresType = {
 const Genres = ({ genres }: GenresType) => {
   const router = useRouter();
   const [genresList, setGenresList] = useState<GenreType[]>(genres);
+  const {setLoading} = useLoading();
+  const [deleteGameModalOpen, setDeleteGameModalOpen] = useState<DeleteModalType>({
+    id: '',
+    isOpen: false
+  });
 
   const tableHead = ['#', 'Name', 'Actions'];
 
   const deleteGenre = async (id: string) => {
+    setLoading(true);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/genres/${id}`, {
         method: 'DELETE',
@@ -33,6 +42,8 @@ const Genres = ({ genres }: GenresType) => {
       }
     } catch (e) {
       toast.error('Internal Server Error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,7 +56,8 @@ const Genres = ({ genres }: GenresType) => {
           fieldId: id,
         },
       }),
-    onDeleteClick: (id: string) => deleteGenre(id),
+    onDeleteClick: (id: string) => setDeleteGameModalOpen({id, isOpen: true}),
+    // onDeleteClick: (id: string) => deleteGenre(id),
   };
 
   return (
@@ -69,6 +81,14 @@ const Genres = ({ genres }: GenresType) => {
         tableHead={tableHead}
         tableBody={genresList}
         cellRenderMethods={cellRenderMethods}
+      />
+      <AlertModal
+        modalIsOpen={deleteGameModalOpen}
+        closeModal={() => setDeleteGameModalOpen({
+          id: '',
+          isOpen: false
+        })}
+        deleteItem={deleteGenre}
       />
     </div>
   );

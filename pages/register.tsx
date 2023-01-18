@@ -97,9 +97,15 @@ const Register = () => {
                 placeholder={'Password'}
                 {...register('password', {
                   required: true,
+                  minLength: 6
                 })}
               />
               <p className="input-label">Password</p>
+              {errors.password && (
+                <span className="error-message">
+                  Password should contain at least 6 characters
+                </span>
+              )}
             </label>
             <label
               className={`input-container ${

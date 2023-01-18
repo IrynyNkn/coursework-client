@@ -6,6 +6,9 @@ import { GetServerSideProps } from 'next';
 import { UserType } from '../../utils/types/users';
 import { CellRenderMethodsType } from '../../utils/types/games';
 import { toast } from 'react-toastify';
+import { useLoading } from '../../utils/hooks/useLoading';
+import { DeleteModalType } from '../../utils/types/common';
+import AlertModal from '../../components/common/AlertModal';
 
 type UsersPageType = {
   users: UserType[];
@@ -13,7 +16,12 @@ type UsersPageType = {
 
 const UsersPage = ({ users }: UsersPageType) => {
   const router = useRouter();
+  const {setLoading} = useLoading();
   const [usersList, setUsersList] = useState<UserType[]>(users);
+  const [deleteGameModalOpen, setDeleteGameModalOpen] = useState<DeleteModalType>({
+    id: '',
+    isOpen: false
+  });
 
   const tableHead = ['#', 'Username', 'Email', 'Roles', 'Actions'];
 
@@ -27,6 +35,7 @@ const UsersPage = ({ users }: UsersPageType) => {
   }, [usersList]);
 
   const deleteUser = async (id: string) => {
+    setLoading(true);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${id}`, {
         method: 'DELETE',
@@ -41,6 +50,8 @@ const UsersPage = ({ users }: UsersPageType) => {
       }
     } catch (e) {
       toast.error('Internal Server Error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,7 +65,7 @@ const UsersPage = ({ users }: UsersPageType) => {
         )),
     },
     onEditClick: (id: string) => router.push(`/users/edit/${id}`),
-    onDeleteClick: (id: string) => deleteUser(id),
+    onDeleteClick: (id: string) => setDeleteGameModalOpen({id, isOpen: true}),
   };
 
   return (
@@ -64,6 +75,14 @@ const UsersPage = ({ users }: UsersPageType) => {
         tableHead={tableHead}
         tableBody={tableBody}
         cellRenderMethods={cellRenderMethods as CellRenderMethodsType}
+      />
+      <AlertModal
+        modalIsOpen={deleteGameModalOpen}
+        closeModal={() => setDeleteGameModalOpen({
+          id: '',
+          isOpen: false
+        })}
+        deleteItem={deleteUser}
       />
     </div>
   );

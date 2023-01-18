@@ -5,6 +5,9 @@ import { PublisherType } from '../../utils/types/games';
 import { useRouter } from 'next/router';
 import Table from '../../components/common/Table';
 import { toast } from 'react-toastify';
+import { useLoading } from '../../utils/hooks/useLoading';
+import { DeleteModalType } from '../../utils/types/common';
+import AlertModal from '../../components/common/AlertModal';
 
 type PublishersType = {
   publishers: PublisherType[];
@@ -12,12 +15,18 @@ type PublishersType = {
 
 const Publishers = ({ publishers }: PublishersType) => {
   const router = useRouter();
+  const {setLoading} = useLoading();
   const [publishersList, setPublishersList] =
     useState<PublisherType[]>(publishers);
+  const [deleteGameModalOpen, setDeleteGameModalOpen] = useState<DeleteModalType>({
+    id: '',
+    isOpen: false
+  });
 
   const tableHead = ['#', 'Name', 'Actions'];
 
   const deletePublisher = async (id: string) => {
+    setLoading(true);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/publishers/${id}`, {
         method: 'DELETE',
@@ -35,6 +44,8 @@ const Publishers = ({ publishers }: PublishersType) => {
       }
     } catch (e) {
       toast.error('Internal Server Error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,7 +58,7 @@ const Publishers = ({ publishers }: PublishersType) => {
           fieldId: id,
         },
       }),
-    onDeleteClick: (id: string) => deletePublisher(id),
+    onDeleteClick: (id: string) => setDeleteGameModalOpen({id, isOpen: true}),
   };
 
   return (
@@ -71,6 +82,14 @@ const Publishers = ({ publishers }: PublishersType) => {
         tableHead={tableHead}
         tableBody={publishersList}
         cellRenderMethods={cellRenderMethods}
+      />
+      <AlertModal
+        modalIsOpen={deleteGameModalOpen}
+        closeModal={() => setDeleteGameModalOpen({
+          id: '',
+          isOpen: false
+        })}
+        deleteItem={deletePublisher}
       />
     </div>
   );

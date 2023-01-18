@@ -8,6 +8,9 @@ import {
 } from '../../utils/types/games';
 import Table from '../../components/common/Table';
 import { toast } from 'react-toastify';
+import { useLoading } from '../../utils/hooks/useLoading';
+import { DeleteModalType } from '../../utils/types/common';
+import AlertModal from '../../components/common/AlertModal';
 
 type PlatformsType = {
   platforms: PlatformType[];
@@ -15,11 +18,17 @@ type PlatformsType = {
 
 const Platforms = ({ platforms }: PlatformsType) => {
   const router = useRouter();
+  const {setLoading} = useLoading();
   const [platformsList, setPlatformsList] = useState<PlatformType[]>(platforms);
+  const [deleteGameModalOpen, setDeleteGameModalOpen] = useState<DeleteModalType>({
+    id: '',
+    isOpen: false
+  });
 
   const tableHead = ['#', 'Name', 'Actions'];
 
   const deletePlatform = async (id: string) => {
+    setLoading(true);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/platforms/${id}`, {
         method: 'DELETE',
@@ -34,6 +43,8 @@ const Platforms = ({ platforms }: PlatformsType) => {
       }
     } catch (e) {
       toast.error('Internal Server Error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,7 +57,7 @@ const Platforms = ({ platforms }: PlatformsType) => {
           fieldId: id,
         },
       }),
-    onDeleteClick: (id: string) => deletePlatform(id),
+    onDeleteClick: (id: string) => setDeleteGameModalOpen({id, isOpen: true}),
   };
 
   return (
@@ -70,6 +81,14 @@ const Platforms = ({ platforms }: PlatformsType) => {
         tableHead={tableHead}
         tableBody={platformsList}
         cellRenderMethods={cellRenderMethods}
+      />
+      <AlertModal
+        modalIsOpen={deleteGameModalOpen}
+        closeModal={() => setDeleteGameModalOpen({
+          id: '',
+          isOpen: false
+        })}
+        deleteItem={deletePlatform}
       />
     </div>
   );

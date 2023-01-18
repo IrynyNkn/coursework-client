@@ -7,6 +7,14 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: rem(24) rem(36);
+  
+  @media screen  and (max-width: 850px){
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media screen  and (max-width: 600px){
+    grid-template-columns: 1fr;
+  }
 }
 
 .container {
@@ -31,4 +39,14 @@
   & input {
     margin-bottom: em(10) !important;
   }
+}
+
+.emptyWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: em(60);
+}
+
+.emptyText {
+  font-size: em(20);
 }

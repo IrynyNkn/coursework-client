@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from '/styles/pages/games-management/GamesManagement.module.scss';
 import { useRouter } from 'next/router';
 import Table from '../../components/common/Table';
@@ -11,10 +11,18 @@ import {
 import { toast } from 'react-toastify';
 import { dehydrate, QueryClient } from 'react-query';
 import useGames from '../../utils/hooks/useGames';
+import AlertModal from '../../components/common/AlertModal';
+import { useLoading } from '../../utils/hooks/useLoading';
+import { DeleteModalType } from '../../utils/types/common';
 
 const GamesManagement = () => {
   const router = useRouter();
+  const {setLoading} = useLoading();
   const { data: games, refetch } = useGames();
+  const [deleteGameModalOpen, setDeleteGameModalOpen] = useState<DeleteModalType>({
+    id: '',
+    isOpen: false
+  });
 
   const tableHead = ['#', 'Title', 'Genres', 'Platforms', 'Actions'];
 
@@ -30,6 +38,7 @@ const GamesManagement = () => {
   }, [games]);
 
   const deleteGame = async (id: string) => {
+    setLoading(true);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/games/${id}`, {
         method: 'DELETE',
@@ -44,6 +53,8 @@ const GamesManagement = () => {
       }
     } catch (e) {
       toast.error('Internal Server Error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,7 +78,7 @@ const GamesManagement = () => {
         pathname: '/games-management/add',
         query: { gameId: id },
       }),
-    onDeleteClick: (id: string) => deleteGame(id),
+    onDeleteClick: (id: string) => setDeleteGameModalOpen({id, isOpen: true}),
   };
 
   return (
@@ -84,6 +95,14 @@ const GamesManagement = () => {
         tableHead={tableHead}
         tableBody={tableBody}
         cellRenderMethods={cellRenderMethods as CellRenderMethodsType}
+      />
+      <AlertModal
+        modalIsOpen={deleteGameModalOpen}
+        closeModal={() => setDeleteGameModalOpen({
+          id: '',
+          isOpen: false
+        })}
+        deleteItem={deleteGame}
       />
     </div>
   );

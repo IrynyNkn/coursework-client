@@ -6,6 +6,10 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50% 50%;
+
+  @media screen  and (max-width: 800px){
+    width: 0;
+  }
 }
 
 .container {
@@ -14,11 +18,6 @@
 }
 
 .backgroundLogin {
-  //width: 40%;
-  //background-image: url("/imgs/gamepads-bg.jpeg");
-  //background-repeat: no-repeat;
-  //background-size: cover;
-  //background-position: 50% 50%;
   @include imageBg('/imgs/gamepads-bg.jpeg');
 }
 
